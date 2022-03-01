@@ -1,20 +1,41 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	View,
+	Linking,
+	Touchable,
+	TouchableOpacity,
+} from 'react-native';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+	const openLink = () => {
+		Linking.openURL('https://covstats-19.pages.dev');
+	};
+
+	return (
+		<View style={styles.container}>
+			<Text style={styles.mainText}>
+				For latest covid-19 statistics look on{' '}
+			</Text>
+			<TouchableOpacity onPress={openLink}>
+				<Text>Covstats-19</Text>
+			</TouchableOpacity>
+			<StatusBar style='auto' />
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+	container: {
+		flex: 1,
+		backgroundColor: '#333',
+		alignItems: 'center',
+		justifyContent: 'center',
+		color: '#fff',
+	},
+	mainText: {
+		color: 'white',
+		fontSize: 30,
+	},
 });
