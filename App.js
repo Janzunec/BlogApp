@@ -6,23 +6,23 @@ import {
 	Linking,
 	Touchable,
 	TouchableOpacity,
+	Button,
 } from 'react-native';
+import Posts from './components/Posts/Posts';
+import { NativeRouter, Routes, Route, Link } from 'react-router-native';
+import About from './components/About/About';
+import NavBar from './components/NavBar/NavBar';
 
 export default function App() {
-	const openLink = () => {
-		Linking.openURL('https://covstats-19.pages.dev');
-	};
-
 	return (
-		<View style={styles.container}>
-			<Text style={styles.mainText}>
-				For latest covid-19 statistics look on{' '}
-			</Text>
-			<TouchableOpacity onPress={openLink}>
-				<Text>Covstats-19</Text>
-			</TouchableOpacity>
-			<StatusBar style='auto' />
-		</View>
+		<NativeRouter>
+			<View style={styles.container}>
+				<Routes>
+					<Route path='/' element={<Posts />} />
+					<Route path='/about' element={<About />} />
+				</Routes>
+			</View>
+		</NativeRouter>
 	);
 }
 
@@ -33,9 +33,5 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		color: '#fff',
-	},
-	mainText: {
-		color: 'white',
-		fontSize: 30,
 	},
 });
