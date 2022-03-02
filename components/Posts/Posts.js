@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Linking } from 'react-native';
+import { StyleSheet, Text, View, Linking, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import NavBar from '../NavBar/NavBar';
 import Post from './Post/Post';
@@ -14,27 +14,42 @@ export default function Blog() {
 				query: `{posts {data {id, title, body, user{id ,name, username}}}}`,
 			}),
 		});
-		const fetchedData = resp.json().then((res) => console.log(res));
+		const fetchedData = await resp.json().then((res) => res);
 
-		console.log(fetchedData);
-
-		// const sortedData = fetchedData.then(resp => )
-		setData(fetchedData);
+		const sortedData = fetchedData.data.posts.data.map((post) => {
+			return post;
+		});
+		setData(sortedData);
 	}, []);
 
-	const openLink = () => {
-		Linking.openURL('https://covstats-19.pages.dev');
+	const editHandler = () => {
+		setData([
+			{
+				title: 'man',
+				body: 'idemoo',
+				id: 0,
+				user: {
+					username: 'JanZunec',
+				},
+			},
+			...data,
+		]);
 	};
 
 	return (
 		<View>
-			<Text style={styles.mainText}>
-				For latest covid-19 statistics look on{' '}
-				<Text onPress={openLink} style={styles.link}>
-					Covstats-19
-				</Text>
-			</Text>
-			<Post />
+			<Text onPress={editHandler}>POSTS</Text>
+			<ScrollView style={styles.postsContainer}>
+				{data.map((post) => (
+					<Post
+						key={post.id}
+						id={post.id}
+						title={post.title}
+						body={post.body}
+						user={post.user}
+					/>
+				))}
+			</ScrollView>
 			<View>
 				<NavBar />
 			</View>
@@ -43,12 +58,10 @@ export default function Blog() {
 }
 
 const styles = StyleSheet.create({
-	mainText: {
-		color: 'white',
-		fontSize: 30,
-	},
-	link: {
-		color: '#0ff',
-		textDecorationLine: 'underline',
+	postsContainer: {
+		// flex: 1,
+		// flexDirection: 'column',
+		// alignItems: 'center',
+		// flexWrap: 'wrap',
 	},
 });
