@@ -10,8 +10,8 @@ export default function NavBar() {
 				<View style={styles.link}>
 					<Icon
 						// raised
-						name='info'
-						type='font-awesome'
+						name='blogger-b'
+						type='font-awesome-5'
 						color='#0ff'
 						style={styles.linkIcon}
 					/>
@@ -22,7 +22,7 @@ export default function NavBar() {
 				<View style={styles.link}>
 					<Icon
 						// raised
-						name='blogger-b'
+						name='info'
 						type='font-awesome-5'
 						color='#0ff'
 						style={styles.linkIcon}

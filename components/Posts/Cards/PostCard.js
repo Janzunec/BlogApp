@@ -156,6 +156,8 @@ const styles = StyleSheet.create({
 		right: 10,
 	},
 	btnIcon: {
+		height: 25,
+		width: 25,
 		zIndex: 10,
 	},
 });

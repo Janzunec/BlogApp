@@ -6,7 +6,6 @@ import {
 	useWindowDimensions,
 	View,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import NavBar from '../NavBar/NavBar';
 import PostCard from './Cards/PostCard';
 import AuthContext from '../Context/auth-context';
