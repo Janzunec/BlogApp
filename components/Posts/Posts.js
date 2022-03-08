@@ -1,56 +1,83 @@
-import { StyleSheet, Text, View, Linking, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	useWindowDimensions,
+	View,
+} from 'react-native';
 import NavBar from '../NavBar/NavBar';
-import Post from './Post/Post';
+import Post from './Cards/PostCard';
 
-export default function Blog() {
-	const [data, setData] = useState([]);
+export default function Blog(props) {
+	const dimensions = useWindowDimensions();
 
-	useEffect(async () => {
-		const resp = await fetch('https://graphqlzero.almansi.me/api', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({
-				query: `{posts {data {id, title, body, user{id ,name, username}}}}`,
-			}),
-		});
-		const fetchedData = await resp.json().then((res) => res);
+	const [postsData, setPostsData] = useState([...props.posts]);
 
-		const sortedData = fetchedData.data.posts.data.map((post) => {
-			return post;
-		});
-		setData(sortedData);
-	}, []);
+	useEffect(() => {
+		setPostsData(props.posts);
+		console.log('Reloaded');
+	}, [props.posts]);
 
-	const editHandler = () => {
-		setData([
-			{
-				title: 'man',
-				body: 'idemoo',
-				id: 0,
-				user: {
-					username: 'JanZunec',
-				},
+	const editPostHandler = () => {
+		const newPostsData = postsData;
+		newPostsData.push({
+			id: 123,
+			title: 'New Post',
+			body: 'Breaking news, Russia attacks Ukraine',
+			user: {
+				username: 'Janzunec',
 			},
-			...data,
-		]);
+		});
+
+		setPostsData([...newPostsData]);
+	};
+
+	const deletePostHandler = (e) => {
+		console.log(e.target.value);
 	};
 
 	return (
 		<View>
-			<Text onPress={editHandler}>POSTS</Text>
-			<ScrollView style={styles.postsContainer}>
-				{data.map((post) => (
+			<Text onPress={editPostHandler}>POSTS</Text>
+			<ScrollView
+				style={[
+					styles.postsContainer,
+					dimensions.width > 1100 && styles.computerPostContainer,
+				]}
+			>
+				{postsData.map((post) => (
 					<Post
 						key={post.id}
 						id={post.id}
 						title={post.title}
 						body={post.body}
 						user={post.user}
+						dimensions={dimensions}
 					/>
 				))}
 			</ScrollView>
-			<View>
+			{/*
+			{dimensions.width > 1100 && (
+				<View
+					style={[
+						styles.postsContainer,
+						dimensions.width > 1100 && styles.computerPostContainer,
+					]}
+				>
+					{postsData.map((post) => (
+						<Post
+							key={post.id}
+							id={post.id}
+							title={post.title}
+							body={post.body}
+							user={post.user}
+							dimensions={dimensions}
+						/>
+					))}
+				</View>
+			)} */}
+			<View style={styles.navBar}>
 				<NavBar />
 			</View>
 		</View>
@@ -59,9 +86,24 @@ export default function Blog() {
 
 const styles = StyleSheet.create({
 	postsContainer: {
-		// flex: 1,
-		// flexDirection: 'column',
+		paddingHorizontal: 10,
+		width: '100%',
+		display: 'flex',
+		flexDirection: 'column',
+		borderRadius: 5,
+		height: 700,
+	},
+	computerPostContainer: {
+		flex: 1,
+		flexWrap: 'wrap',
+		width: '100%',
 		// alignItems: 'center',
-		// flexWrap: 'wrap',
+		alignContent: 'center',
+		borderRadius: 5,
+		marginHorizontal: 'auto',
+	},
+	navBar: {
+		width: '100%',
+		height: 'auto',
 	},
 });

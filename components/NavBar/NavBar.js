@@ -4,7 +4,7 @@ import { Link, NativeRouter } from 'react-router-native';
 
 export default function NavBar() {
 	return (
-		<View>
+		<View style={styles}>
 			<Link to='/'>
 				<View>
 					<Text>Posts</Text>
@@ -19,4 +19,16 @@ export default function NavBar() {
 	);
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	navigation: {
+		width: '100%',
+		height: 50,
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		display: 'flex',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		flexDirection: 'row',
+	},
+});

@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import {
+	StyleSheet,
+	Text,
+	View,
+	useWindowDimensions,
+	Linking,
+} from 'react-native';
 import React from 'react';
 import NavBar from '../NavBar/NavBar';
 
@@ -6,6 +12,9 @@ export default function About() {
 	const openLink = () => {
 		Linking.openURL('https://covstats-19.pages.dev');
 	};
+
+	const dimensions = useWindowDimensions();
+
 	return (
 		<View>
 			<Text style={styles.mainText}>
