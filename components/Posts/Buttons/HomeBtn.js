@@ -10,7 +10,7 @@ export default function HomeBtn() {
 				name='times'
 				type='font-awesome'
 				color={'#fff'}
-				style={{ height: 27, width: 27, padding: 0, margin: 0 }}
+				style={{ height: 28, width: 28, padding: 0, margin: 0 }}
 			/>
 		</Link>
 	);
@@ -18,8 +18,8 @@ export default function HomeBtn() {
 
 const styles = StyleSheet.create({
 	cross: {
-		height: 40,
-		width: 40,
+		height: 45,
+		width: 45,
 		backgroundColor: '#444',
 		borderRadius: 50,
 		display: 'flex',

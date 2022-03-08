@@ -4,11 +4,11 @@
 		"slug": "BlogApp",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/icon.png",
+		"icon": "./assets/BlogIcon.png",
 		"splash": {
-			"image": "./assets/newspaperIcon.png",
+			"image": "./assets/BlogIcon.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"backgroundColor": "#161B23"
 		},
 		"updates": {
 			"fallbackToCacheTimeout": 0
@@ -19,12 +19,12 @@
 		},
 		"android": {
 			"adaptiveIcon": {
-				"foregroundImage": "./assets/newspaperIcon.png",
-				"backgroundColor": "#FFFFFF"
+				"foregroundImage": "./assets/BlogIcon.png",
+				"backgroundColor": "#161B23"
 			}
 		},
 		"web": {
-			"favicon": "./assets/newspaperIcon.png"
+			"favicon": "./assets/blogging.png"
 		}
 	}
 }

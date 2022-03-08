@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
 	Image,
 	StyleSheet,
@@ -8,11 +8,18 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Link } from 'react-router-native';
+import AuthContext from '../../Context/auth-context';
 
 export default function Post(props) {
 	const dimensions = useWindowDimensions();
 
 	const postImage = require('../../../assets/test.png');
+
+	const deleteHandler = () => {
+		props.deleteHandler(props.id);
+	};
+
+	const authCtx = useContext(AuthContext);
 
 	return (
 		<Link
@@ -24,11 +31,11 @@ export default function Post(props) {
 				user: props.user,
 			}}
 			style={{
-				width: dimensions.width > 1100 ? '40%' : '100%',
-				minHeight: 'auto',
+				width: dimensions.width > 1100 ? '30%' : '100%',
+				height: dimensions.width > 1100 ? 450 : 'auto',
 			}}
 		>
-			<View style={[styles.post]}>
+			<View style={styles.post}>
 				<Image source={postImage} style={styles.postImage} />
 				<View style={styles.postData}>
 					<Text numberOfLines={2} style={styles.postTitle}>
@@ -52,13 +59,26 @@ export default function Post(props) {
 						/>
 					</View>
 					<View style={[styles.postBtn, styles.deleteBtn]}>
-						<Icon
-							// raised
-							name='trash'
-							type='font-awesome'
-							color='#a11'
-							style={styles.btnIcon}
-						/>
+						{!authCtx.isLoggedIn && (
+							<Link to='/login' style={styles.btnIcon}>
+								<Icon
+									// raised
+									name='trash'
+									type='font-awesome'
+									color='#a11'
+								/>
+							</Link>
+						)}
+						{authCtx.isLoggedIn && (
+							<Icon
+								// raised
+								name='trash'
+								type='font-awesome'
+								color='#a11'
+								style={styles.btnIcon}
+								onPress={deleteHandler}
+							/>
+						)}
 					</View>
 				</View>
 			</View>
@@ -79,7 +99,7 @@ const styles = StyleSheet.create({
 	},
 	postImage: {
 		width: '100%',
-		height: 150,
+		height: 200,
 		borderTopLeftRadius: 5,
 		borderTopRightRadius: 5,
 	},
@@ -113,6 +133,7 @@ const styles = StyleSheet.create({
 		bottom: 10,
 		height: 40,
 		width: 40,
+		zIndex: 20,
 		backgroundColor: '#ccc',
 		display: 'flex',
 		alignItems: 'center',

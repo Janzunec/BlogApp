@@ -15,6 +15,8 @@ import About from './components/About/About';
 import NavBar from './components/NavBar/NavBar';
 import React, { useEffect, useState } from 'react';
 import PostDetails from './components/Posts/PostDetails';
+import { AuthContextProvider } from './components/Context/auth-context';
+import Login from './components/Login/Login';
 
 export default function App() {
 	const [data, setData] = useState([]);
@@ -36,15 +38,21 @@ export default function App() {
 	}, []);
 
 	return (
-		<NativeRouter>
-			<View style={styles.container}>
-				<Routes>
-					<Route path='/' element={<Posts posts={data} />} />
-					<Route path='/about' element={<About />} />
-					<Route path='/posts/details' element={<PostDetails />} />
-				</Routes>
-			</View>
-		</NativeRouter>
+		<AuthContextProvider>
+			<NativeRouter>
+				<View style={styles.container}>
+					<Routes>
+						<Route path='/' element={<Posts posts={data} />} />
+						<Route path='/about' element={<About />} />
+						<Route
+							path='/posts/details'
+							element={<PostDetails />}
+						/>
+						<Route path='/login' element={<Login />} />
+					</Routes>
+				</View>
+			</NativeRouter>
+		</AuthContextProvider>
 	);
 }
 
@@ -54,6 +62,5 @@ const styles = StyleSheet.create({
 		backgroundColor: '#161B23',
 		color: '#fff',
 		width: '100%',
-		paddingVertical: 30,
 	},
 });
