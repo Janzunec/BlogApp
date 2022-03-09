@@ -4,6 +4,7 @@ import {
 	View,
 	useWindowDimensions,
 	Linking,
+	Image,
 } from 'react-native';
 import React from 'react';
 import NavBar from '../NavBar/NavBar';
@@ -16,14 +17,27 @@ export default function About() {
 	const dimensions = useWindowDimensions();
 
 	return (
-		<View>
-			<Text style={styles.mainText}>
-				For latest covid-19 statistics look on{' '}
-				<Text onPress={openLink} style={styles.link}>
+		<View
+			style={[
+				styles.about,
+				{
+					height: dimensions.height,
+				},
+			]}
+		>
+			<Image
+				source={require('../../assets/covid-19-statistics.jpg')}
+				style={styles.aboutImage}
+			/>
+			<Text style={styles.aboutText}>
+				Za najnovejše statistike in podatke o Covid-19 za cel svet
+				poglejte na moji najnovejši spletni aplikaciji{' '}
+				<Text onPress={openLink} style={styles.aboutLink}>
 					Covstats-19
 				</Text>
 			</Text>
-			<View>
+
+			<View style={styles.navigation}>
 				<NavBar />
 			</View>
 		</View>
@@ -31,12 +45,28 @@ export default function About() {
 }
 
 const styles = StyleSheet.create({
-	mainText: {
+	about: {
+		width: '100%',
+		paddingTop: 30,
+		position: 'relative',
+	},
+	aboutText: {
 		color: 'white',
 		fontSize: 30,
+		paddingHorizontal: 10,
 	},
-	link: {
+	aboutLink: {
 		color: '#0ff',
 		textDecorationLine: 'underline',
+	},
+	aboutImage: {
+		width: '100%',
+		height: 300,
+		marginBottom: 20,
+	},
+	navigation: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
 	},
 });

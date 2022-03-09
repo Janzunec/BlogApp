@@ -10,6 +10,7 @@ import {
 import AuthContext from '../Context/auth-context';
 import HomeBtn from '../Posts/Buttons/HomeBtn';
 import { useNavigate } from 'react-router-native';
+import { color } from 'react-native-elements/dist/helpers';
 
 export default function Login() {
 	const dimensions = useWindowDimensions();
@@ -36,7 +37,10 @@ export default function Login() {
 			navigate('/');
 			return;
 		}
-		console.log('Incorrect login info!');
+	};
+
+	const logoutHandler = () => {
+		authCtx.onLogout();
 	};
 
 	return (
@@ -44,31 +48,42 @@ export default function Login() {
 			style={[
 				styles.login,
 				{
-					height: dimensions.height - 40,
+					minHeight: dimensions.height - 40,
 				},
 			]}
 		>
 			{!authCtx.isLoggedIn && (
-				<View>
+				<View style={styles.loginForm}>
 					<TextInput
 						placeholder='username'
 						onChangeText={usernameInputHandler}
 						defaultValue={username}
+						style={styles.loginInput}
 					/>
 					<TextInput
 						placeholder='password'
 						onChangeText={passwordInputHandler}
 						defaultValue={password}
+						style={styles.loginInput}
 					/>
-					<Button title='Login' onPress={loginHandler} />
+					<View style={styles.formButton}>
+						<Button title='Login' onPress={loginHandler} />
+					</View>
 				</View>
 			)}
 			{authCtx.isLoggedIn && (
-				<View style={styles.homeBtn}>
-					<Text>{`You are logged in as ${authCtx.user}`}</Text>
+				<View style={styles.loginForm}>
+					<Text
+						style={styles.loggedinText}
+					>{`You are logged in as ${authCtx.user}`}</Text>
+					<View style={styles.formButton}>
+						<Button title='Logout' onPress={logoutHandler} />
+					</View>
 				</View>
 			)}
-			<HomeBtn />
+			<View style={styles.homeBtn}>
+				<HomeBtn />
+			</View>
 		</View>
 	);
 }
@@ -87,5 +102,32 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	loginForm: {
+		width: '100%',
+		height: 'auto',
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+	loginInput: {
+		width: '80%',
+		fontSize: 17,
+		backgroundColor: '#ddd',
+		color: '#000',
+		marginVertical: 10,
+		borderRadius: 5,
+		padding: 5,
+		marginHorizontal: 'auto',
+	},
+	formButton: {
+		width: '20%',
+		borderRadius: 5,
+		marginHorizontal: 'auto',
+		marginTop: 15,
+	},
+	loggedinText: {
+		fontSize: 25,
+		color: '#fff',
 	},
 });

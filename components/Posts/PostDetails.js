@@ -17,7 +17,6 @@ export default function PostDetails() {
 
 	let imageHeight = dimensions.height / 4;
 	let detailsHeight = dimensions.height - imageHeight;
-	// const imageWidth = dimensions.width;
 
 	const location = useLocation();
 	let { id, image, title, body, user } = location.state;
@@ -52,8 +51,6 @@ export default function PostDetails() {
 		const filteredData = fetchedData.filter(
 			(comment) => comment.post.id === id
 		);
-
-		console.log(filteredData);
 
 		setPostComments([...filteredData]);
 	}, []);
@@ -162,7 +159,7 @@ const styles = StyleSheet.create({
 		minHeight: 'auto',
 	},
 	postDeatailsUser: {
-		color: '#cb2d6f',
+		color: '#0ffd',
 		fontSize: 18,
 		marginVertical: 10,
 	},

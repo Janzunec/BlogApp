@@ -16,7 +16,6 @@ export default function Blog(props) {
 	const [postsData, setPostsData] = useState([...props.posts]);
 
 	const authCtx = useContext(AuthContext);
-	console.log(authCtx.isLoggedIn);
 
 	useEffect(() => {
 		setPostsData(props.posts);
@@ -25,7 +24,7 @@ export default function Blog(props) {
 	const editPostHandler = () => {
 		const newPostsData = postsData;
 		newPostsData.push({
-			id: 123,
+			id: Math.random(),
 			title: 'New Post',
 			body: 'Breaking news, Russia attacks Ukraine',
 			user: {
@@ -34,6 +33,11 @@ export default function Blog(props) {
 		});
 		setPostsData([...newPostsData]);
 	};
+
+	// Uporabi funkcionalnost deleteHandler-ja, da bos pridobil index clicked elementa in tako iz arraya postsData pridobil podatke o clicked postu
+	// Nato ustvari formo ki bo delovala za editanje in dodajanje, obe bosta prejeli type kako bota uporabljeni (editanje: 'edit', nov: 'new')
+	// Forma edit bo dobila podatke ki jih nastavi kot Value textInputa, uporabi pa funkcionalnost iz login komponente
+	// V tej komponenti dodaj + button za novo ikono v enak View kot navBar, saj bo na sredini nad navbarom
 
 	const deletePostHandler = (id) => {
 		const checkPostId = (post) => {
@@ -58,9 +62,7 @@ export default function Blog(props) {
 				paddingTop: dimensions.width > 1100 ? 50 : 30,
 			}}
 		>
-			<Text style={styles.title} onPress={editPostHandler}>
-				BLOG - POSTS
-			</Text>
+			<Text style={styles.title}>BLOG - POSTS</Text>
 
 			{dimensions.width < 1100 && (
 				<ScrollView
@@ -68,7 +70,7 @@ export default function Blog(props) {
 						styles.postsContainer,
 						{
 							height: dimensions.height,
-							marginBottom: 30,
+							marginBottom: 50,
 						},
 					]}
 				>

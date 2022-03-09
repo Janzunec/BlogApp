@@ -4,7 +4,6 @@ import { Icon } from 'react-native-elements';
 
 export default function CommentCard(props) {
 	const { id, email, name, body, post } = props.data;
-	console.log(id);
 
 	return (
 		<View style={styles.comment}>

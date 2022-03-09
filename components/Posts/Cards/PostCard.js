@@ -19,6 +19,10 @@ export default function Post(props) {
 		props.deleteHandler(props.id);
 	};
 
+	const editHandler = () => {
+		props.editHandler();
+	};
+
 	const authCtx = useContext(AuthContext);
 
 	return (
@@ -51,13 +55,27 @@ export default function Post(props) {
 				</View>
 				<View style={styles.postButtons}>
 					<View style={[styles.postBtn, styles.editBtn]}>
-						<Icon
-							// raised
-							name='edit'
-							type='font-awesome'
-							color='#333'
-							style={styles.btnIcon}
-						/>
+						{!authCtx.isLoggedIn && (
+							<Link to={'/login'} style={styles.btnIcon}>
+								<Icon
+									// raised
+									name='edit'
+									type='font-awesome'
+									color='#333'
+									style={styles.btnIcon}
+								/>
+							</Link>
+						)}
+						{authCtx.isLoggedIn && (
+							<Icon
+								// raised
+								name='edit'
+								type='font-awesome'
+								color='#333'
+								style={styles.btnIcon}
+								onPress={editHandler}
+							/>
+						)}
 					</View>
 					<View style={[styles.postBtn, styles.deleteBtn]}>
 						{!authCtx.isLoggedIn && (
@@ -67,6 +85,7 @@ export default function Post(props) {
 									name='trash'
 									type='font-awesome'
 									color='#a11'
+									style={styles.btnIcon}
 								/>
 							</Link>
 						)}
@@ -160,8 +179,12 @@ const styles = StyleSheet.create({
 		right: 10,
 	},
 	btnIcon: {
-		height: 25,
-		width: 25,
+		height: 40,
+		width: 40,
 		zIndex: 10,
+		borderRadius: 50,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 });
