@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -6,10 +6,9 @@ import {
 	useWindowDimensions,
 	View,
 } from 'react-native';
+import AuthContext from '../Context/auth-context';
 import NavBar from '../NavBar/NavBar';
 import PostCard from './Cards/PostCard';
-import AuthContext from '../Context/auth-context';
-import { Link } from 'react-router-native';
 
 export default function Blog(props) {
 	const dimensions = useWindowDimensions();
@@ -56,7 +55,7 @@ export default function Blog(props) {
 			style={{
 				height: dimensions.height,
 				position: 'relative',
-				paddingTop: 50,
+				paddingTop: dimensions.width > 1100 ? 50 : 30,
 			}}
 		>
 			<Text style={styles.title} onPress={editPostHandler}>
@@ -68,8 +67,8 @@ export default function Blog(props) {
 					style={[
 						styles.postsContainer,
 						{
-							height: dimensions.height - 90,
-							marginBottom: 40,
+							height: dimensions.height,
+							marginBottom: 30,
 						},
 					]}
 				>
@@ -92,7 +91,6 @@ export default function Blog(props) {
 					style={[
 						styles.postsContainer,
 						styles.computerPostContainer,
-						// { width: dimensions.width - 20 },
 					]}
 				>
 					{postsData.map((post) => (

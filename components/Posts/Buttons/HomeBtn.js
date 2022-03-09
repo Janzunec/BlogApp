@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { Link } from 'react-router-native';
+import { StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { Link } from 'react-router-native';
 
 export default function HomeBtn() {
 	return (
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 	cross: {
 		height: 45,
 		width: 45,
-		backgroundColor: '#444',
+		backgroundColor: '#444a',
 		borderRadius: 50,
 		display: 'flex',
 		alignItems: 'center',

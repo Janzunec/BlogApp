@@ -1,22 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import {
-	StyleSheet,
-	Text,
-	View,
-	Linking,
-	Touchable,
-	TouchableOpacity,
-	Button,
-	useWindowDimensions,
-} from 'react-native';
-import Posts from './components/Posts/Posts';
-import { NativeRouter, Routes, Route, Link } from 'react-router-native';
-import About from './components/About/About';
-import NavBar from './components/NavBar/NavBar';
 import React, { useEffect, useState } from 'react';
-import PostDetails from './components/Posts/PostDetails';
+import { StyleSheet, View } from 'react-native';
+import { NativeRouter, Route, Routes } from 'react-router-native';
+import About from './components/About/About';
 import { AuthContextProvider } from './components/Context/auth-context';
 import Login from './components/Login/Login';
+import PostDetails from './components/Posts/PostDetails';
+import Posts from './components/Posts/Posts';
 
 export default function App() {
 	const [data, setData] = useState([]);
@@ -26,7 +15,7 @@ export default function App() {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
 			body: JSON.stringify({
-				query: `{posts {data {id, title, body, user{id ,name, username}}}}`,
+				query: `{posts {data {id, title, body, user{id ,name, username, email}}}}`,
 			}),
 		});
 		const fetchedData = await resp.json().then((res) => res);

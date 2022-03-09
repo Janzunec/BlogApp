@@ -1,11 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { Link, NativeRouter } from 'react-router-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { Link } from 'react-router-native';
 
 export default function NavBar() {
+	const dimensions = useWindowDimensions();
 	return (
-		<View style={styles.navigation}>
+		<View
+			style={[
+				styles.navigation,
+				{
+					borderBottomWidth: dimensions.width > 1100 ? 2 : 0,
+				},
+			]}
+		>
 			<Link to='/'>
 				<View style={styles.link}>
 					<Icon
@@ -43,9 +51,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		flexDirection: 'row',
 		backgroundColor: '#161B23',
-		borderBottomWidth: 1,
-		borderBottomColor: '#333',
-		// borderWidth: 4,
+		borderBottomColor: '#444',
 	},
 	link: {
 		width: 'auto',

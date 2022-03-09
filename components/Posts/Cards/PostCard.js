@@ -25,6 +25,7 @@ export default function Post(props) {
 		<Link
 			to='/posts/details'
 			state={{
+				id: props.id,
 				image: postImage,
 				title: props.title,
 				body: props.body,
@@ -32,7 +33,7 @@ export default function Post(props) {
 			}}
 			style={{
 				width: dimensions.width > 1100 ? '30%' : '100%',
-				height: dimensions.width > 1100 ? 450 : 'auto',
+				height: dimensions.width > 1100 ? 420 : 'auto',
 			}}
 		>
 			<View style={styles.post}>
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 		backgroundColor: '#ddd',
 		borderRadius: 5,
-		// padding: 20,
+		position: 'relative',
 	},
 	postImage: {
 		width: '100%',
@@ -125,8 +126,11 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 	},
 	postButtons: {
-		position: 'relative',
+		position: 'absolute',
+		width: 'auto',
 		height: 15,
+		bottom: 0,
+		right: 0,
 	},
 	postBtn: {
 		position: 'absolute',

@@ -1,44 +1,130 @@
+import React, { useEffect, useState } from 'react';
 import {
+	Image,
+	ScrollView,
 	StyleSheet,
 	Text,
-	View,
-	Image,
 	useWindowDimensions,
-	ScrollView,
+	View,
 } from 'react-native';
-import React from 'react';
 import { useLocation } from 'react-router-native';
 import HomeBtn from './Buttons/HomeBtn';
+import CommentCard from './Cards/CommentCard';
 
 export default function PostDetails() {
+	const [postComments, setPostComments] = useState([]);
 	const dimensions = useWindowDimensions();
 
 	let imageHeight = dimensions.height / 4;
-	let detailsHeight = dimensions.height - imageHeight - 500;
-	const imageWidth = dimensions.width;
+	let detailsHeight = dimensions.height - imageHeight;
+	// const imageWidth = dimensions.width;
 
 	const location = useLocation();
-	const { image, title, body, user } = location.state;
+	let { id, image, title, body, user } = location.state;
+
+	title = title[0].toUpperCase() + title.substring(1);
+	body = body[0].toUpperCase() + body.substring(1);
+
+	useEffect(async () => {
+		const resp = await fetch('https://graphqlzero.almansi.me/api', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({
+				query: `{comments{
+					data{
+					  id
+					  name
+					  body
+					  email
+					  post{
+						id
+					  }
+					}
+				  }
+				}`,
+			}),
+		});
+
+		const fetchedData = await resp
+			.json()
+			.then((res) => res.data.comments.data);
+
+		const filteredData = fetchedData.filter(
+			(comment) => comment.post.id === id
+		);
+
+		console.log(filteredData);
+
+		setPostComments([...filteredData]);
+	}, []);
 
 	return (
-		<View style={styles.postDeatails}>
+		<View
+			style={[
+				dimensions.width > 1100
+					? styles.postDeatailsComputer
+					: styles.postDeatails,
+				{
+					height: dimensions.height,
+				},
+			]}
+		>
 			<Image
 				source={image}
 				style={{
 					height: imageHeight,
-					width: imageWidth,
+					width: 'auto',
 				}}
 			/>
 			<ScrollView
 				style={[
+					styles.postDeatailsText,
 					{
-						height: detailsHeight,
-						width: '100%',
+						minHeight: detailsHeight,
 					},
 				]}
+				showsVerticalScrollIndicator={false}
 			>
-				<Text>{title}</Text>
-				<Text>{body}</Text>
+				<Text style={styles.postDetailsTitle}>{title}</Text>
+				<Text
+					style={styles.postDeatailsUser}
+				>{`${user.username} - ${user.name} | ${user.email}`}</Text>
+				<Text style={styles.postDeatailsBody}>{`${body}
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+				
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
+				`}</Text>
+				<View>
+					<Text>COMMENTS:</Text>
+					{postComments.map((comment) => (
+						<CommentCard key={comment.id} data={comment} />
+					))}
+				</View>
 			</ScrollView>
 			<View style={styles.homeBtn}>
 				<HomeBtn />
@@ -49,14 +135,46 @@ export default function PostDetails() {
 
 const styles = StyleSheet.create({
 	postDeatails: {
-		height: '100%',
-		width: '100%',
+		// height: '100%',
+		width: 'auto',
 		overflow: 'hidden',
+		position: 'relative',
+	},
+	postDeatailsComputer: {
+		width: '50%',
+		marginHorizontal: 'auto',
+	},
+	postDeatailsText: {
+		width: '100%',
+		minHeight: 'auto',
+		padding: 10,
+	},
+	postDetailsTitle: {
+		color: '#0ff',
+		fontSize: 25,
+		fontWeight: '700',
+	},
+	postDeatailsUser: {
+		marginTop: 10,
+		color: '#cb2d6f',
+		fontSize: 18,
+	},
+	postDeatailsBody: {
+		color: '#fff',
+		fontSize: 16,
+		fontWeight: '400',
+		marginTop: 10,
+		minHeight: 'auto',
 	},
 	homeBtn: {
 		width: '100%',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+		zIndex: 20,
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		marginBottom: 10,
 	},
 });

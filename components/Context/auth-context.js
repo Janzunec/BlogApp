@@ -43,7 +43,7 @@ export const AuthContextProvider = (props) => {
 
 	useEffect(async () => {
 		// const storedUserLoggedInInformation = getData();
-		const storedUserLoggedInInformation = true;
+		const storedUserLoggedInInformation = false;
 		console.log(storedUserLoggedInInformation);
 
 		if (storedUserLoggedInInformation === true) {
