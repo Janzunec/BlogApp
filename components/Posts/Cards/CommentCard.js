@@ -19,8 +19,8 @@ export default function CommentCard(props) {
 				<Text style={styles.commentUserEmail}>{email}</Text>
 			</View>
 
-			<Text>{name}</Text>
-			<Text>{body}</Text>
+			<Text style={styles.commentUserName}>{name}</Text>
+			<Text style={styles.commentUserBody}>{body}</Text>
 		</View>
 	);
 }
@@ -47,5 +47,13 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		fontWeight: '700',
 		marginLeft: 5,
+	},
+	commentUserName: {
+		marginVertical: 5,
+		fontSize: 17,
+		fontWeight: '700',
+	},
+	commentUserBody: {
+		fontSize: 15,
 	},
 });

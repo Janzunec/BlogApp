@@ -86,9 +86,7 @@ export default function PostDetails() {
 				showsVerticalScrollIndicator={false}
 			>
 				<Text style={styles.postDetailsTitle}>{title}</Text>
-				<Text
-					style={styles.postDeatailsUser}
-				>{`${user.username} - ${user.name} | ${user.email}`}</Text>
+
 				<Text style={styles.postDeatailsBody}>{`${body}
 
 Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
@@ -117,10 +115,12 @@ Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamez
 
 Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
 				
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-				`}</Text>
-				<View>
-					<Text>COMMENTS:</Text>
+Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.`}</Text>
+				<Text
+					style={styles.postDeatailsUser}
+				>{`${user.username} - ${user.name} | ${user.email}`}</Text>
+				<View style={styles.commentSection}>
+					<Text style={styles.commentSectionTitile}>COMMENTS:</Text>
 					{postComments.map((comment) => (
 						<CommentCard key={comment.id} data={comment} />
 					))}
@@ -154,17 +154,26 @@ const styles = StyleSheet.create({
 		fontSize: 25,
 		fontWeight: '700',
 	},
-	postDeatailsUser: {
-		marginTop: 10,
-		color: '#cb2d6f',
-		fontSize: 18,
-	},
 	postDeatailsBody: {
 		color: '#fff',
 		fontSize: 16,
 		fontWeight: '400',
 		marginTop: 10,
 		minHeight: 'auto',
+	},
+	postDeatailsUser: {
+		color: '#cb2d6f',
+		fontSize: 18,
+		marginVertical: 10,
+	},
+	commentSection: {
+		minHeight: 'auto',
+		width: '100%',
+		marginBottom: 65,
+	},
+	commentSectionTitile: {
+		fontSize: 25,
+		color: '#fff',
 	},
 	homeBtn: {
 		width: '100%',
