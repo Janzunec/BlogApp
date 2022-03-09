@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { Link } from 'react-router-native';
+import AuthContext from '../Context/auth-context';
 
 export default function NavBar() {
+	const authCtx = useContext(AuthContext);
+
 	const dimensions = useWindowDimensions();
 	return (
 		<View
@@ -36,6 +39,34 @@ export default function NavBar() {
 						style={styles.linkIcon}
 					/>
 					<Text style={styles.linkText}>About</Text>
+				</View>
+			</Link>
+			<Link to='/login'>
+				<View style={styles.link}>
+					{!authCtx.isLoggedIn && (
+						<>
+							<Icon
+								// raised
+								name='sign-in'
+								type='font-awesome'
+								color='#0ff'
+								style={styles.linkIcon}
+							/>
+							<Text style={styles.linkText}>Login</Text>
+						</>
+					)}
+					{authCtx.isLoggedIn && (
+						<>
+							<Icon
+								// raised
+								name='user'
+								type='font-awesome-5'
+								color='#0ff'
+								style={styles.linkIcon}
+							/>
+							<Text style={styles.linkText}>Account</Text>
+						</>
+					)}
 				</View>
 			</Link>
 		</View>

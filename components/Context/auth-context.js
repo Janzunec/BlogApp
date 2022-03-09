@@ -3,9 +3,10 @@ import { View } from 'react-native';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthContext = React.createContext({
+	user: '',
 	isLoggedIn: false,
 	onLogout: () => {},
-	onLogin: (email, password) => {},
+	onLogin: (username) => {},
 });
 
 export const AuthContextProvider = (props) => {
@@ -30,30 +31,32 @@ export const AuthContextProvider = (props) => {
 	// };
 
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [user, setUser] = useState('');
 
 	const logoutHandler = () => {
-		AsyncStorage.removeItem('isLoggedIn');
 		setIsLoggedIn(false);
+		setUser('');
 	};
 
-	const loginHandler = () => {
-		storeData(true);
+	const loginHandler = (username) => {
 		setIsLoggedIn(true);
+		setUser(username);
 	};
 
-	useEffect(async () => {
-		// const storedUserLoggedInInformation = getData();
-		const storedUserLoggedInInformation = false;
-		console.log(storedUserLoggedInInformation);
+	// useEffect(async () => {
+	// 	// const storedUserLoggedInInformation = getData();
+	// 	const storedUserLoggedInInformation = false;
+	// 	console.log(storedUserLoggedInInformation);
 
-		if (storedUserLoggedInInformation === true) {
-			setIsLoggedIn(true);
-		}
-	}, []);
+	// 	if (storedUserLoggedInInformation === true) {
+	// 		setIsLoggedIn(true);
+	// 	}
+	// }, []);
 
 	return (
 		<AuthContext.Provider
 			value={{
+				user: user,
 				isLoggedIn: isLoggedIn,
 				onLogout: logoutHandler,
 				onLogin: loginHandler,
