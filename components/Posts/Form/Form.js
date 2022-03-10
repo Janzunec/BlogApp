@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
-		bottom: 0,
+		bottom: 30,
 		left: 0,
 	},
 });

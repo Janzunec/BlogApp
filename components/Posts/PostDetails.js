@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 	Image,
 	ScrollView,
@@ -8,7 +8,8 @@ import {
 	View,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { useLocation, useNavigate } from 'react-router-native';
+import { Link, useLocation, useNavigate } from 'react-router-native';
+import AuthContext from '../Context/auth-context';
 import HomeBtn from './Buttons/HomeBtn';
 import CommentCard from './Cards/CommentCard';
 
@@ -16,6 +17,7 @@ export default function PostDetails() {
 	const [postComments, setPostComments] = useState([]);
 	const dimensions = useWindowDimensions();
 	const navigate = useNavigate();
+	const authCtx = useContext(AuthContext);
 
 	let imageHeight = dimensions.height / 4;
 	let detailsHeight = dimensions.height - imageHeight;
@@ -128,54 +130,113 @@ Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamez
 					{`${user.username} - ${user.name} | ${user.email}`}
 				</Text>
 				<View style={styles.actionBtns}>
-					<View style={styles.actionBtn}>
-						<Icon
-							// raised
-							name='edit'
-							type='font-awesome'
-							color='#aaa'
-							style={{
-								height: 25,
-								width: 25,
-							}}
-							onPress={editHandler}
-						/>
-						<Text
-							style={{
-								color: '#aaa',
-								fontSize: 20,
-								fontWeight: '700',
-								marginLeft: 3,
-							}}
-							onPress={editHandler}
+					{authCtx.isLoggedIn && (
+						<View style={styles.actionBtn}>
+							<Icon
+								// raised
+								name='edit'
+								type='font-awesome'
+								color='#aaa'
+								style={{
+									height: 25,
+									width: 25,
+								}}
+								onPress={editHandler}
+							/>
+							<Text
+								style={{
+									color: '#aaa',
+									fontSize: 20,
+									fontWeight: '700',
+									marginLeft: 3,
+								}}
+								onPress={editHandler}
+							>
+								EDIT POST
+							</Text>
+						</View>
+					)}
+					{!authCtx.isLoggedIn && (
+						<Link to='/login' style={styles.actionBtn}>
+							<>
+								<Icon
+									// raised
+									name='edit'
+									type='font-awesome'
+									color='#aaa'
+									style={{
+										height: 25,
+										width: 25,
+									}}
+								/>
+								<Text
+									style={{
+										color: '#aaa',
+										fontSize: 20,
+										fontWeight: '700',
+										marginLeft: 3,
+									}}
+								>
+									EDIT POST
+								</Text>
+							</>
+						</Link>
+					)}
+					{authCtx.isLoggedIn && (
+						<View style={[styles.actionBtn, { marginLeft: 15 }]}>
+							<Icon
+								// raised
+								name='trash'
+								type='font-awesome'
+								color='#f00'
+								style={{
+									height: 25,
+									width: 25,
+								}}
+								onPress={deleteHandler}
+							/>
+							<Text
+								style={{
+									color: 'red',
+									fontSize: 20,
+									fontWeight: '700',
+									marginLeft: 3,
+								}}
+								onPress={deleteHandler}
+							>
+								DELETE POST
+							</Text>
+						</View>
+					)}
+					{!authCtx.isLoggedIn && (
+						<Link
+							to='/login'
+							style={[styles.actionBtn, { marginLeft: 15 }]}
 						>
-							EDIT POST
-						</Text>
-					</View>
-					<View style={[styles.actionBtn, { marginLeft: 15 }]}>
-						<Icon
-							// raised
-							name='trash'
-							type='font-awesome'
-							color='#f00'
-							style={{
-								height: 25,
-								width: 25,
-							}}
-							onPress={deleteHandler}
-						/>
-						<Text
-							style={{
-								color: 'red',
-								fontSize: 20,
-								fontWeight: '700',
-								marginLeft: 3,
-							}}
-							onPress={deleteHandler}
-						>
-							DELETE POST
-						</Text>
-					</View>
+							<>
+								<Icon
+									// raised
+									name='trash'
+									type='font-awesome'
+									color='#f00'
+									style={{
+										height: 25,
+										width: 25,
+									}}
+								/>
+								<Text
+									style={{
+										color: 'red',
+										fontSize: 20,
+										fontWeight: '700',
+										marginLeft: 3,
+									}}
+								>
+									DELETE POST
+								</Text>
+							</>
+						</Link>
+					)}
 				</View>
 				<View style={styles.commentSection}>
 					<Text style={styles.commentSectionTitile}>COMMENTS:</Text>
