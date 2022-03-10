@@ -1,42 +1,46 @@
 import React, { useContext, useState } from 'react';
 import {
+	Button,
 	StyleSheet,
 	Text,
-	View,
 	TextInput,
-	Button,
 	useWindowDimensions,
+	View,
+	KeyboardAvoidingView,
 } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import AuthContext from '../Context/auth-context';
 import HomeBtn from '../Posts/Buttons/HomeBtn';
-import { useNavigate } from 'react-router-native';
-import { color } from 'react-native-elements/dist/helpers';
 
 export default function Login() {
 	const dimensions = useWindowDimensions();
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
+	const [areCorrectCredentials, setAreCorrectCredentials] = useState(true);
 
 	const authCtx = useContext(AuthContext);
 
 	const navigate = useNavigate();
 
 	const usernameInputHandler = (input) => {
-		console.log(input);
 		setUsername(input);
+		setAreCorrectCredentials(true);
 	};
 
 	const passwordInputHandler = (input) => {
 		setPassword(input);
+		setAreCorrectCredentials(true);
 	};
 
 	const loginHandler = () => {
 		if (username === 'admin' && password === '1234') {
+			setAreCorrectCredentials(true);
 			authCtx.onLogin(username);
 			navigate('/');
 			return;
 		}
+		setAreCorrectCredentials(false);
 	};
 
 	const logoutHandler = () => {
@@ -44,14 +48,22 @@ export default function Login() {
 	};
 
 	return (
-		<View
+		<KeyboardAvoidingView
 			style={[
 				styles.login,
 				{
 					minHeight: dimensions.height - 40,
 				},
 			]}
+			behavior='height'
 		>
+			<View style={{ height: 20, marginVertical: 10 }}>
+				{!areCorrectCredentials && (
+					<Text style={styles.error}>
+						Username and password are incorrect!
+					</Text>
+				)}
+			</View>
 			{!authCtx.isLoggedIn && (
 				<View style={styles.loginForm}>
 					<TextInput
@@ -84,7 +96,7 @@ export default function Login() {
 			<View style={styles.homeBtn}>
 				<HomeBtn />
 			</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
@@ -94,14 +106,11 @@ const styles = StyleSheet.create({
 		paddingTop: 40,
 		position: 'relative',
 	},
-	homeBtn: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
+	error: {
 		width: '100%',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
+		textAlign: 'center',
+		fontSize: 20,
+		color: '#f00',
 	},
 	loginForm: {
 		width: '100%',
@@ -129,5 +138,14 @@ const styles = StyleSheet.create({
 	loggedinText: {
 		fontSize: 25,
 		color: '#fff',
+	},
+	homeBtn: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		width: '100%',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 });

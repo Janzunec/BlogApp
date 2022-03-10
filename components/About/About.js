@@ -36,8 +36,19 @@ export default function About() {
 					Covstats-19
 				</Text>
 			</Text>
+			<Text style={styles.aboutText}>
+				Ob izdelavi aplikacije sem se kljub omejenemu času zabaval in
+				dokončal vse kot je bilo navedeno v navodilih naloge. Želel sem
+				še dodati asyncStorage za hranjenje podatkov o logirani osebi,
+				vendar se mi ni zdelo preveč potrebno. Lep pozdrav, Jan Žunec
+			</Text>
 
-			<View style={styles.navigation}>
+			<View
+				style={[
+					styles.navigation,
+					dimensions.width > 1100 ? { top: 0 } : { bottom: 0 },
+				]}
+			>
 				<NavBar />
 			</View>
 		</View>
@@ -47,13 +58,14 @@ export default function About() {
 const styles = StyleSheet.create({
 	about: {
 		width: '100%',
-		paddingTop: 30,
+		paddingTop: 40,
 		position: 'relative',
 	},
 	aboutText: {
 		color: 'white',
-		fontSize: 30,
+		fontSize: 25,
 		paddingHorizontal: 10,
+		marginVertical: 10,
 	},
 	aboutLink: {
 		color: '#0ff',
@@ -62,11 +74,10 @@ const styles = StyleSheet.create({
 	aboutImage: {
 		width: '100%',
 		height: 300,
-		marginBottom: 20,
 	},
 	navigation: {
 		position: 'absolute',
-		bottom: 0,
+		width: '100%',
 		left: 0,
 	},
 });

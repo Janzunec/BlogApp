@@ -7,19 +7,21 @@ import {
 	useWindowDimensions,
 	View,
 } from 'react-native';
-import { useLocation } from 'react-router-native';
+import { Icon } from 'react-native-elements';
+import { useLocation, useNavigate } from 'react-router-native';
 import HomeBtn from './Buttons/HomeBtn';
 import CommentCard from './Cards/CommentCard';
 
 export default function PostDetails() {
 	const [postComments, setPostComments] = useState([]);
 	const dimensions = useWindowDimensions();
+	const navigate = useNavigate();
 
 	let imageHeight = dimensions.height / 4;
 	let detailsHeight = dimensions.height - imageHeight;
 
 	const location = useLocation();
-	let { id, image, title, body, user } = location.state;
+	let { id, image, title, body, user, editPost, deletePost } = location.state;
 
 	title = title[0].toUpperCase() + title.substring(1);
 	body = body[0].toUpperCase() + body.substring(1);
@@ -54,6 +56,14 @@ export default function PostDetails() {
 
 		setPostComments([...filteredData]);
 	}, []);
+
+	const editHandler = () => {
+		editPost();
+	};
+	const deleteHandler = () => {
+		deletePost();
+		navigate('/');
+	};
 
 	return (
 		<View
@@ -113,11 +123,63 @@ Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamez
 Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
 				
 Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.`}</Text>
-				<Text
-					style={styles.postDeatailsUser}
-				>{`${user.username} - ${user.name} | ${user.email}`}</Text>
+
+				<Text style={styles.postDeatailsUser}>
+					{`${user.username} - ${user.name} | ${user.email}`}
+				</Text>
+				<View style={styles.actionBtns}>
+					<View style={styles.actionBtn}>
+						<Icon
+							// raised
+							name='edit'
+							type='font-awesome'
+							color='#aaa'
+							style={{
+								height: 25,
+								width: 25,
+							}}
+							onPress={editHandler}
+						/>
+						<Text
+							style={{
+								color: '#aaa',
+								fontSize: 20,
+								fontWeight: '700',
+								marginLeft: 3,
+							}}
+							onPress={editHandler}
+						>
+							EDIT POST
+						</Text>
+					</View>
+					<View style={[styles.actionBtn, { marginLeft: 15 }]}>
+						<Icon
+							// raised
+							name='trash'
+							type='font-awesome'
+							color='#f00'
+							style={{
+								height: 25,
+								width: 25,
+							}}
+							onPress={deleteHandler}
+						/>
+						<Text
+							style={{
+								color: 'red',
+								fontSize: 20,
+								fontWeight: '700',
+								marginLeft: 3,
+							}}
+							onPress={deleteHandler}
+						>
+							DELETE POST
+						</Text>
+					</View>
+				</View>
 				<View style={styles.commentSection}>
 					<Text style={styles.commentSectionTitile}>COMMENTS:</Text>
+
 					{postComments.map((comment) => (
 						<CommentCard key={comment.id} data={comment} />
 					))}
@@ -163,9 +225,26 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		marginVertical: 10,
 	},
+	actionBtns: {
+		width: '100%',
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
+		marginVertical: 10,
+	},
+	actionBtn: {
+		fontSize: 20,
+		fontWeight: '700',
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 	commentSection: {
 		minHeight: 'auto',
 		width: '100%',
+		marginTop: 10,
 		marginBottom: 65,
 	},
 	commentSectionTitile: {

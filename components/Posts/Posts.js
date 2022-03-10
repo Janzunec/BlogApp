@@ -6,12 +6,11 @@ import {
 	useWindowDimensions,
 	View,
 } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import AuthContext from '../Context/auth-context';
 import NavBar from '../NavBar/NavBar';
+import AddPostBtn from './Buttons/AddPostBtn';
 import PostCard from './Cards/PostCard';
-import { Link, useNavigate } from 'react-router-native';
-import PostDetails from './PostDetails';
-import { Icon } from 'react-native-elements';
 
 export default function Blog(props) {
 	const dimensions = useWindowDimensions();
@@ -23,7 +22,8 @@ export default function Blog(props) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		setPostsData(props.posts);
+		let isMounted = true;
+		if (isMounted) setPostsData(props.posts);
 	}, [props.posts]);
 
 	const addPostHandler = (data) => {
@@ -31,18 +31,15 @@ export default function Blog(props) {
 			return post.id === data.id;
 		};
 
-		const postIndex = postsData.findIndex(checkPostId);
-		console.log(postIndex);
 		const newPostsData = postsData;
+		const postIndex = newPostsData.findIndex(checkPostId);
 
 		if (postIndex === -1) {
 			newPostsData.unshift(data);
-			setPostsData([...newPostsData]);
-			return;
+		} else {
+			newPostsData.splice(postIndex, 1, data);
 		}
-
-		newPostsData[postIndex] = data;
-		setPostsData([...newPostsData]);
+		setPostsData(newPostsData);
 	};
 
 	const editPostHandler = (id) => {
@@ -116,6 +113,8 @@ export default function Blog(props) {
 				</ScrollView>
 			)}
 
+			{/* Različna elementa sta z razlogom da sezna izgleda dobro tudi na računalniku in večjih dimenzijah */}
+
 			{dimensions.width > 1100 && (
 				<View
 					style={[
@@ -143,26 +142,7 @@ export default function Blog(props) {
 						: styles.addPostBtn,
 				]}
 			>
-				<Link
-					to={authCtx.isLoggedIn === true ? '/posts/form' : '/login'}
-					state={{
-						type: 'add',
-						addPost: addPostHandler,
-					}}
-					style={styles.plus}
-				>
-					<Icon
-						name='plus'
-						type='font-awesome'
-						color='#fff'
-						style={{
-							width: 25,
-							height: 25,
-							padding: 0,
-							margin: 0,
-						}}
-					/>
-				</Link>
+				<AddPostBtn addPostHandler={addPostHandler} />
 			</View>
 			<View
 				style={[
@@ -230,16 +210,5 @@ const styles = StyleSheet.create({
 		left: '47%',
 		// right: '45%',
 		marginHorizontal: 'auto',
-	},
-	plus: {
-		height: 45,
-		width: 45,
-		backgroundColor: '#444a',
-		borderRadius: 50,
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		padding: 0,
-		zIndex: 40,
 	},
 });

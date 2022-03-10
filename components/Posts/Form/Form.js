@@ -1,12 +1,23 @@
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-native';
+import {
+	Button,
+	StyleSheet,
+	Text,
+	TextInput,
+	useWindowDimensions,
+	View,
+	ScrollView,
+	KeyboardAvoidingView,
+} from 'react-native';
+import { useLocation, useNavigate } from 'react-router-native';
 import HomeBtn from '../Buttons/HomeBtn';
 
 export default function Form() {
 	const location = useLocation();
-	const { data, type, addPost } = location.state;
+	const navigate = useNavigate();
+	const dimensions = useWindowDimensions();
 
+	const { data, type, addPost } = location.state;
 	const isEditing = type === 'edit';
 
 	const [title, setTitle] = useState(isEditing ? data.title : '');
@@ -53,61 +64,118 @@ export default function Form() {
 			user: user,
 		};
 		addPost(dataToPost);
+		navigate('/');
 	};
 
 	return (
-		<View>
-			{!isEditing && <Text>ADD POST</Text>}
-			{isEditing && <Text>EDIT POST</Text>}
-			<View>
+		<KeyboardAvoidingView
+			style={{
+				height: dimensions.height,
+				paddingTop: 40,
+				position: 'relative',
+			}}
+			behavior='height'
+		>
+			{!isEditing && <Text style={styles.title}>ADD POST</Text>}
+			{isEditing && <Text style={styles.title}>EDIT POST</Text>}
+			<ScrollView
+				style={[styles.form, { height: dimensions.height - 40 }]}
+			>
 				<TextInput
-					placeholder='title'
+					placeholder='Title'
 					onChangeText={titleInputHandler}
 					defaultValue={title}
-					style={styles.loginInput}
+					style={styles.formInput}
+					multiline={true}
 				/>
 				<TextInput
-					placeholder='body'
+					placeholder='Body'
 					onChangeText={bodyInputHandler}
 					defaultValue={body}
-					style={styles.loginInput}
+					style={styles.formInput}
+					multiline={true}
 				/>
 				{isEditing && (
-					<Text>
+					<Text style={styles.user}>
 						{`User: ${user.username} - ${user.name} | ${user.email}`}
 					</Text>
 				)}
 				{!isEditing && (
 					<View>
 						<TextInput
-							placeholder='name'
+							placeholder='Name'
 							onChangeText={nameInputHandler}
 							defaultValue=''
+							style={styles.formInput}
 						/>
 						<TextInput
-							placeholder='username'
+							placeholder='Username'
 							onChangeText={usernameInputHandler}
 							defaultValue=''
+							style={styles.formInput}
 						/>
 						<TextInput
-							placeholder='email'
+							placeholder='Email'
 							onChangeText={emailInputHandler}
 							defaultValue=''
+							style={styles.formInput}
 						/>
 					</View>
 				)}
-				<View style={styles.formButton}>
+				<View style={styles.formBtn}>
 					<Button
-						title='submitPostForm'
+						title='submit post'
 						onPress={submitPostFormHandler}
 					/>
 				</View>
-			</View>
-			<View>
+			</ScrollView>
+			<View style={styles.homeBtn}>
 				<HomeBtn />
 			</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	title: {
+		width: '100%',
+		textAlign: 'center',
+		fontSize: 25,
+		fontWeight: '700',
+		color: '#fff',
+	},
+	form: {
+		minHeight: 'auto',
+		width: '100%',
+		paddingHorizontal: 20,
+		marginTop: 20,
+		marginBottom: 60,
+	},
+	formInput: {
+		width: '100%',
+		height: 'auto',
+		backgroundColor: '#fffc',
+		borderRadius: 5,
+		marginVertical: 10,
+		fontSize: 15,
+		padding: 5,
+	},
+	user: {
+		fontSize: 17,
+		color: '#fff',
+		marginVertical: 10,
+	},
+	formBtn: {
+		width: '100%',
+		marginTop: 10,
+	},
+	homeBtn: {
+		position: 'absolute',
+		width: '100%',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		bottom: 0,
+		left: 0,
+	},
+});

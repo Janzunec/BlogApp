@@ -34,6 +34,8 @@ export default function Post(props) {
 				title: props.title,
 				body: props.body,
 				user: props.user,
+				editPost: editHandler,
+				deletePost: deleteHandler,
 			}}
 			style={{
 				width: dimensions.width > 1100 ? '30%' : '100%',
@@ -181,8 +183,8 @@ const styles = StyleSheet.create({
 		right: 10,
 	},
 	btnIcon: {
-		height: 40,
-		width: 40,
+		height: 45,
+		width: 45,
 		zIndex: 10,
 		borderRadius: 50,
 		display: 'flex',
