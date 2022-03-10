@@ -4,6 +4,7 @@ import { NativeRouter, Route, Routes } from 'react-router-native';
 import About from './components/About/About';
 import { AuthContextProvider } from './components/Context/auth-context';
 import Login from './components/Login/Login';
+import Form from './components/Posts/Form/Form';
 import PostDetails from './components/Posts/PostDetails';
 import Posts from './components/Posts/Posts';
 
@@ -38,6 +39,7 @@ export default function App() {
 							element={<PostDetails />}
 						/>
 						<Route path='/login' element={<Login />} />
+						<Route path='/posts/form' element={<Form />} />
 					</Routes>
 				</View>
 			</NativeRouter>

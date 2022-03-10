@@ -9,6 +9,9 @@ import {
 import AuthContext from '../Context/auth-context';
 import NavBar from '../NavBar/NavBar';
 import PostCard from './Cards/PostCard';
+import { Link, useNavigate } from 'react-router-native';
+import PostDetails from './PostDetails';
+import { Icon } from 'react-native-elements';
 
 export default function Blog(props) {
 	const dimensions = useWindowDimensions();
@@ -17,21 +20,46 @@ export default function Blog(props) {
 
 	const authCtx = useContext(AuthContext);
 
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		setPostsData(props.posts);
 	}, [props.posts]);
 
-	const editPostHandler = () => {
+	const addPostHandler = (data) => {
+		const checkPostId = (post) => {
+			return post.id === data.id;
+		};
+
+		const postIndex = postsData.findIndex(checkPostId);
+		console.log(postIndex);
 		const newPostsData = postsData;
-		newPostsData.push({
-			id: Math.random(),
-			title: 'New Post',
-			body: 'Breaking news, Russia attacks Ukraine',
-			user: {
-				username: 'Janzunec',
+
+		if (postIndex === -1) {
+			newPostsData.unshift(data);
+			setPostsData([...newPostsData]);
+			return;
+		}
+
+		newPostsData[postIndex] = data;
+		setPostsData([...newPostsData]);
+	};
+
+	const editPostHandler = (id) => {
+		const checkPostId = (post) => {
+			return post.id === id;
+		};
+
+		const postIndex = postsData.findIndex(checkPostId);
+		const clickedPostData = postsData[postIndex];
+
+		navigate('/posts/form', {
+			state: {
+				data: clickedPostData,
+				type: 'edit',
+				addPost: addPostHandler,
 			},
 		});
-		setPostsData([...newPostsData]);
 	};
 
 	// Uporabi funkcionalnost deleteHandler-ja, da bos pridobil index clicked elementa in tako iz arraya postsData pridobil podatke o clicked postu
@@ -110,6 +138,34 @@ export default function Blog(props) {
 			)}
 			<View
 				style={[
+					dimensions.width > 1100
+						? styles.addPostBtnComputer
+						: styles.addPostBtn,
+				]}
+			>
+				<Link
+					to={authCtx.isLoggedIn === true ? '/posts/form' : '/login'}
+					state={{
+						type: 'add',
+						addPost: addPostHandler,
+					}}
+					style={styles.plus}
+				>
+					<Icon
+						name='plus'
+						type='font-awesome'
+						color='#fff'
+						style={{
+							width: 25,
+							height: 25,
+							padding: 0,
+							margin: 0,
+						}}
+					/>
+				</Link>
+			</View>
+			<View
+				style={[
 					styles.navBar,
 					dimensions.width > 1100 && styles.navBarComputer,
 				]}
@@ -156,5 +212,34 @@ const styles = StyleSheet.create({
 	navBarComputer: {
 		top: 0,
 		height: 30,
+	},
+	addPostBtn: {
+		width: '100%',
+		position: 'absolute',
+		left: 0,
+		zIndex: 30,
+		display: 'flex',
+		alignItems: 'center',
+		bottom: 60,
+	},
+	addPostBtnComputer: {
+		// width: 'auto',
+		position: 'absolute',
+		zIndex: 30,
+		bottom: 60,
+		left: '47%',
+		// right: '45%',
+		marginHorizontal: 'auto',
+	},
+	plus: {
+		height: 45,
+		width: 45,
+		backgroundColor: '#444a',
+		borderRadius: 50,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		padding: 0,
+		zIndex: 40,
 	},
 });

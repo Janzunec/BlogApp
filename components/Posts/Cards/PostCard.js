@@ -20,7 +20,7 @@ export default function Post(props) {
 	};
 
 	const editHandler = () => {
-		props.editHandler();
+		props.editHandler(props.id);
 	};
 
 	const authCtx = useContext(AuthContext);
@@ -51,7 +51,9 @@ export default function Post(props) {
 						{props.body[0].toUpperCase() +
 							props.body.substring(1).replace(/(\s)/g, ' ')}
 					</Text>
-					<Text style={styles.postUser}>{props.user.username}</Text>
+					<Text
+						style={styles.postUser}
+					>{`${props.user.name} - ${props.user.username}`}</Text>
 				</View>
 				<View style={styles.postButtons}>
 					<View style={[styles.postBtn, styles.editBtn]}>
