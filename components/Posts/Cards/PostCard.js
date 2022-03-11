@@ -57,54 +57,54 @@ export default function Post(props) {
 						style={styles.postUser}
 					>{`${props.user.name} - ${props.user.username}`}</Text>
 				</View>
-				<View style={styles.postButtons}>
-					<View style={[styles.postBtn, styles.editBtn]}>
-						{!authCtx.isLoggedIn && (
-							<Link to={'/login'} style={styles.btnIcon}>
-								<Icon
-									// raised
-									name='edit'
-									type='font-awesome'
-									color='#333'
-									style={styles.btnIcon}
-								/>
-							</Link>
-						)}
-						{authCtx.isLoggedIn && (
-							<Icon
-								// raised
-								name='edit'
-								type='font-awesome'
-								color='#333'
-								style={styles.btnIcon}
-								onPress={editHandler}
-							/>
-						)}
-					</View>
-					<View style={[styles.postBtn, styles.deleteBtn]}>
-						{!authCtx.isLoggedIn && (
-							<Link to='/login' style={styles.btnIcon}>
-								<Icon
-									// raised
-									name='trash'
-									type='font-awesome'
-									color='#a11'
-									style={styles.btnIcon}
-								/>
-							</Link>
-						)}
-						{authCtx.isLoggedIn && (
-							<Icon
-								// raised
-								name='trash'
-								type='font-awesome'
-								color='#a11'
-								style={styles.btnIcon}
-								onPress={deleteHandler}
-							/>
-						)}
-					</View>
-				</View>
+// 				<View style={styles.postButtons}>
+// 					<View style={[styles.postBtn, styles.editBtn]}>
+// 						{!authCtx.isLoggedIn && (
+// 							<Link to={'/login'} style={styles.btnIcon}>
+// 								<Icon
+// 									// raised
+// 									name='edit'
+// 									type='font-awesome'
+// 									color='#333'
+// 									style={styles.btnIcon}
+// 								/>
+// 							</Link>
+// 						)}
+// 						{authCtx.isLoggedIn && (
+// 							<Icon
+// 								// raised
+// 								name='edit'
+// 								type='font-awesome'
+// 								color='#333'
+// 								style={styles.btnIcon}
+// 								onPress={editHandler}
+// 							/>
+// 						)}
+// 					</View>
+// 					<View style={[styles.postBtn, styles.deleteBtn]}>
+// 						{!authCtx.isLoggedIn && (
+// 							<Link to='/login' style={styles.btnIcon}>
+// 								<Icon
+// 									// raised
+// 									name='trash'
+// 									type='font-awesome'
+// 									color='#a11'
+// 									style={styles.btnIcon}
+// 								/>
+// 							</Link>
+// 						)}
+// 						{authCtx.isLoggedIn && (
+// 							<Icon
+// 								// raised
+// 								name='trash'
+// 								type='font-awesome'
+// 								color='#a11'
+// 								style={styles.btnIcon}
+// 								onPress={deleteHandler}
+// 							/>
+// 						)}
+// 					</View>
+// 				</View>
 			</View>
 		</Link>
 	);
@@ -148,47 +148,47 @@ const styles = StyleSheet.create({
 		fontWeight: '700',
 		fontSize: 15,
 	},
-	postButtons: {
-		position: 'absolute',
-		width: 'auto',
-		height: 15,
-		bottom: 0,
-		right: 0,
-	},
-	postBtn: {
-		position: 'absolute',
-		bottom: 10,
-		height: 40,
-		width: 40,
-		zIndex: 20,
-		backgroundColor: '#ccc',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderRadius: 50,
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 2,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
+// 	postButtons: {
+// 		position: 'absolute',
+// 		width: 'auto',
+// 		height: 15,
+// 		bottom: 0,
+// 		right: 0,
+// 	},
+// 	postBtn: {
+// 		position: 'absolute',
+// 		bottom: 10,
+// 		height: 40,
+// 		width: 40,
+// 		zIndex: 20,
+// 		backgroundColor: '#ccc',
+// 		display: 'flex',
+// 		alignItems: 'center',
+// 		justifyContent: 'center',
+// 		borderRadius: 50,
+// 		shadowColor: '#000',
+// 		shadowOffset: {
+// 			width: 2,
+// 			height: 2,
+// 		},
+// 		shadowOpacity: 0.25,
+// 		shadowRadius: 3.84,
 
-		elevation: 5,
-	},
-	editBtn: {
-		right: 60,
-	},
-	deleteBtn: {
-		right: 10,
-	},
-	btnIcon: {
-		height: 45,
-		width: 45,
-		zIndex: 10,
-		borderRadius: 50,
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
+// 		elevation: 5,
+// 	},
+// 	editBtn: {
+// 		right: 60,
+// 	},
+// 	deleteBtn: {
+// 		right: 10,
+// 	},
+// 	btnIcon: {
+// 		height: 45,
+// 		width: 45,
+// 		zIndex: 10,
+// 		borderRadius: 50,
+// 		display: 'flex',
+// 		alignItems: 'center',
+// 		justifyContent: 'center',
+// 	},
 });
