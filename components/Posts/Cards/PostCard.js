@@ -57,54 +57,54 @@ export default function Post(props) {
 						style={styles.postUser}
 					>{`${props.user.name} - ${props.user.username}`}</Text>
 				</View>
-// 				<View style={styles.postButtons}>
-// 					<View style={[styles.postBtn, styles.editBtn]}>
-// 						{!authCtx.isLoggedIn && (
-// 							<Link to={'/login'} style={styles.btnIcon}>
-// 								<Icon
-// 									// raised
-// 									name='edit'
-// 									type='font-awesome'
-// 									color='#333'
-// 									style={styles.btnIcon}
-// 								/>
-// 							</Link>
-// 						)}
-// 						{authCtx.isLoggedIn && (
-// 							<Icon
-// 								// raised
-// 								name='edit'
-// 								type='font-awesome'
-// 								color='#333'
-// 								style={styles.btnIcon}
-// 								onPress={editHandler}
-// 							/>
-// 						)}
-// 					</View>
-// 					<View style={[styles.postBtn, styles.deleteBtn]}>
-// 						{!authCtx.isLoggedIn && (
-// 							<Link to='/login' style={styles.btnIcon}>
-// 								<Icon
-// 									// raised
-// 									name='trash'
-// 									type='font-awesome'
-// 									color='#a11'
-// 									style={styles.btnIcon}
-// 								/>
-// 							</Link>
-// 						)}
-// 						{authCtx.isLoggedIn && (
-// 							<Icon
-// 								// raised
-// 								name='trash'
-// 								type='font-awesome'
-// 								color='#a11'
-// 								style={styles.btnIcon}
-// 								onPress={deleteHandler}
-// 							/>
-// 						)}
-// 					</View>
-// 				</View>
+ 				{/* <View style={styles.postButtons}>
+ 					<View style={[styles.postBtn, styles.editBtn]}>
+ 						{!authCtx.isLoggedIn && (
+ 							<Link to={'/login'} style={styles.btnIcon}>
+ 								<Icon
+ 									// raised
+ 									name='edit'
+ 									type='font-awesome'
+ 									color='#333'
+ 									style={styles.btnIcon}
+ 								/>
+ 							</Link>
+ 						)}
+ 						{authCtx.isLoggedIn && (
+ 							<Icon
+ 								// raised
+ 								name='edit'
+ 								type='font-awesome'
+ 								color='#333'
+ 								style={styles.btnIcon}
+ 								onPress={editHandler}
+ 							/>
+ 						)}
+ 					</View>
+ 					<View style={[styles.postBtn, styles.deleteBtn]}>
+ 						{!authCtx.isLoggedIn && (
+ 							<Link to='/login' style={styles.btnIcon}>
+ 								<Icon
+ 									// raised
+ 									name='trash'
+ 									type='font-awesome'
+ 									color='#a11'
+ 									style={styles.btnIcon}
+ 								/>
+ 							</Link>
+ 						)}
+ 						{authCtx.isLoggedIn && (
+ 							<Icon
+ 								// raised
+ 								name='trash'
+ 								type='font-awesome'
+ 								color='#a11'
+ 								style={styles.btnIcon}
+ 								onPress={deleteHandler}
+ 							/>
+ 						)}
+ 					</View>
+ 				</View> */}
 			</View>
 		</Link>
 	);
