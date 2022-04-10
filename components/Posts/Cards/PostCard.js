@@ -30,10 +30,6 @@ export default function Post(props) {
 			to='/posts/details'
 			state={{
 				id: props.id,
-				image: postImage,
-				title: props.title,
-				body: props.body,
-				user: props.user,
 				editPost: editHandler,
 				deletePost: deleteHandler,
 			}}
@@ -43,7 +39,12 @@ export default function Post(props) {
 			}}
 		>
 			<View style={styles.post}>
-				<Image source={postImage} style={styles.postImage} />
+				<Image
+					source={{
+						uri: props.image,
+					}}
+					style={styles.postImage}
+				/>
 				<View style={styles.postData}>
 					<Text numberOfLines={2} style={styles.postTitle}>
 						{props.title[0].toUpperCase() +
@@ -53,11 +54,8 @@ export default function Post(props) {
 						{props.body[0].toUpperCase() +
 							props.body.substring(1).replace(/(\s)/g, ' ')}
 					</Text>
-					<Text
-						style={styles.postUser}
-					>{`${props.user.name} - ${props.user.username}`}</Text>
 				</View>
- 				{/* <View style={styles.postButtons}>
+				{/* <View style={styles.postButtons}>
  					<View style={[styles.postBtn, styles.editBtn]}>
  						{!authCtx.isLoggedIn && (
  							<Link to={'/login'} style={styles.btnIcon}>
@@ -124,8 +122,11 @@ const styles = StyleSheet.create({
 	postImage: {
 		width: '100%',
 		height: 200,
+		flex: 1,
+		resizeMode: 'contain',
 		borderTopLeftRadius: 5,
 		borderTopRightRadius: 5,
+		backgroundColor: '#000',
 	},
 	postData: {
 		width: '100%',
@@ -148,47 +149,47 @@ const styles = StyleSheet.create({
 		fontWeight: '700',
 		fontSize: 15,
 	},
-// 	postButtons: {
-// 		position: 'absolute',
-// 		width: 'auto',
-// 		height: 15,
-// 		bottom: 0,
-// 		right: 0,
-// 	},
-// 	postBtn: {
-// 		position: 'absolute',
-// 		bottom: 10,
-// 		height: 40,
-// 		width: 40,
-// 		zIndex: 20,
-// 		backgroundColor: '#ccc',
-// 		display: 'flex',
-// 		alignItems: 'center',
-// 		justifyContent: 'center',
-// 		borderRadius: 50,
-// 		shadowColor: '#000',
-// 		shadowOffset: {
-// 			width: 2,
-// 			height: 2,
-// 		},
-// 		shadowOpacity: 0.25,
-// 		shadowRadius: 3.84,
+	// 	postButtons: {
+	// 		position: 'absolute',
+	// 		width: 'auto',
+	// 		height: 15,
+	// 		bottom: 0,
+	// 		right: 0,
+	// 	},
+	// 	postBtn: {
+	// 		position: 'absolute',
+	// 		bottom: 10,
+	// 		height: 40,
+	// 		width: 40,
+	// 		zIndex: 20,
+	// 		backgroundColor: '#ccc',
+	// 		display: 'flex',
+	// 		alignItems: 'center',
+	// 		justifyContent: 'center',
+	// 		borderRadius: 50,
+	// 		shadowColor: '#000',
+	// 		shadowOffset: {
+	// 			width: 2,
+	// 			height: 2,
+	// 		},
+	// 		shadowOpacity: 0.25,
+	// 		shadowRadius: 3.84,
 
-// 		elevation: 5,
-// 	},
-// 	editBtn: {
-// 		right: 60,
-// 	},
-// 	deleteBtn: {
-// 		right: 10,
-// 	},
-// 	btnIcon: {
-// 		height: 45,
-// 		width: 45,
-// 		zIndex: 10,
-// 		borderRadius: 50,
-// 		display: 'flex',
-// 		alignItems: 'center',
-// 		justifyContent: 'center',
-// 	},
+	// 		elevation: 5,
+	// 	},
+	// 	editBtn: {
+	// 		right: 60,
+	// 	},
+	// 	deleteBtn: {
+	// 		right: 10,
+	// 	},
+	// 	btnIcon: {
+	// 		height: 45,
+	// 		width: 45,
+	// 		zIndex: 10,
+	// 		borderRadius: 50,
+	// 		display: 'flex',
+	// 		alignItems: 'center',
+	// 		justifyContent: 'center',
+	// 	},
 });

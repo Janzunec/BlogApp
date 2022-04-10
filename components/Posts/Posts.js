@@ -59,11 +59,6 @@ export default function Blog(props) {
 		});
 	};
 
-	// Uporabi funkcionalnost deleteHandler-ja, da bos pridobil index clicked elementa in tako iz arraya postsData pridobil podatke o clicked postu
-	// Nato ustvari formo ki bo delovala za editanje in dodajanje, obe bosta prejeli type kako bota uporabljeni (editanje: 'edit', nov: 'new')
-	// Forma edit bo dobila podatke ki jih nastavi kot Value textInputa, uporabi pa funkcionalnost iz login komponente
-	// V tej komponenti dodaj + button za novo ikono v enak View kot navBar, saj bo na sredini nad navbarom
-
 	const deletePostHandler = (id) => {
 		const checkPostId = (post) => {
 			return post.id === id;
@@ -101,11 +96,11 @@ export default function Blog(props) {
 				>
 					{postsData.map((post) => (
 						<PostCard
-							key={post.id}
-							id={post.id}
+							key={post.post_ID}
+							id={post.post_ID}
 							title={post.title}
 							body={post.body}
-							user={post.user}
+							image={post.image}
 							deleteHandler={deletePostHandler}
 							editHandler={editPostHandler}
 						/>
@@ -124,11 +119,11 @@ export default function Blog(props) {
 				>
 					{postsData.map((post) => (
 						<PostCard
-							key={post.id}
-							id={post.id}
+							key={post.post_ID}
+							id={post.post_ID}
 							title={post.title}
 							body={post.body}
-							user={post.user}
+							image={post.image}
 							deleteHandler={deletePostHandler}
 							editHandler={editPostHandler}
 						/>

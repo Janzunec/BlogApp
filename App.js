@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { NativeRouter, Route, Routes } from 'react-router-native';
 import About from './components/About/About';
 import { AuthContextProvider } from './components/Context/auth-context';
@@ -10,21 +10,18 @@ import Posts from './components/Posts/Posts';
 
 export default function App() {
 	const [data, setData] = useState([]);
-
 	useEffect(async () => {
-		const resp = await fetch('https://graphqlzero.almansi.me/api', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({
-				query: `{posts {data {id, title, body, user{id ,name, username, email}}}}`,
-			}),
+		const resp = await fetch('http://localhost:3000/post/all', {
+			method: 'GET',
 		});
-		const fetchedData = await resp.json().then((res) => res);
+		const fetchedData = await resp
+			.json()
+			.then((res) => res)
+			.catch((err) => {
+				console.log(error);
+			});
 
-		const sortedData = fetchedData.data.posts.data.map((post) => {
-			return post;
-		});
-		setData(sortedData);
+		setData(await fetchedData);
 	}, []);
 
 	return (
@@ -40,6 +37,7 @@ export default function App() {
 						/>
 						<Route path='/login' element={<Login />} />
 						<Route path='/posts/form' element={<Form />} />
+						{/* <Image source={data[0].image} /> */}
 					</Routes>
 				</View>
 			</NativeRouter>
