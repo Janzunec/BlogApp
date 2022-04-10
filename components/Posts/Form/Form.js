@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import {
 	Button,
 	StyleSheet,
@@ -17,55 +17,53 @@ export default function Form() {
 	const navigate = useNavigate();
 	const dimensions = useWindowDimensions();
 
-	const { data, type, addPost } = location.state;
-	const isEditing = type === 'edit';
+	const { formType, post_ID, title, body, image } = location.state;
+	const isEditing = formType === 'edit' ? true : false;
 
-	const [title, setTitle] = useState(isEditing ? data.title : '');
-	const [body, setBody] = useState(isEditing ? data.body : '');
-	const [user, setUser] = useState(
-		isEditing ? data.user : { id: Math.ceil(Math.random() * 100 + 8) }
-	);
+	const titleInput = useRef(null);
+	const bodyInput = useRef(null);
+	const imageInput = useRef(null);
 
-	const titleInputHandler = (input) => {
-		setTitle(input);
-	};
+	// const titleInputHandler = (input) => {
+	// 	setTitle(input);
+	// };
 
-	const bodyInputHandler = (input) => {
-		setBody(input);
-	};
+	// const bodyInputHandler = (input) => {
+	// 	setBody(input);
+	// };
 
-	const nameInputHandler = (input) => {
-		setUser((prevState) => ({
-			...prevState,
-			name: input,
-		}));
-	};
+	// const nameInputHandler = (input) => {
+	// 	setUser((prevState) => ({
+	// 		...prevState,
+	// 		name: input,
+	// 	}));
+	// };
 
-	const usernameInputHandler = (input) => {
-		setUser((prevState) => ({
-			...prevState,
-			username: input,
-		}));
-	};
+	// const usernameInputHandler = (input) => {
+	// 	setUser((prevState) => ({
+	// 		...prevState,
+	// 		username: input,
+	// 	}));
+	// };
 
-	const emailInputHandler = (input) => {
-		setUser((prevState) => ({
-			...prevState,
-			email: input,
-		}));
-	};
+	// const emailInputHandler = (input) => {
+	// 	setUser((prevState) => ({
+	// 		...prevState,
+	// 		email: input,
+	// 	}));
+	// };
 
-	const submitPostFormHandler = () => {
-		if (title === '' || body === '' || user === {}) return;
-		const dataToPost = {
-			id: isEditing ? data.id : Math.ceil(Math.random() * 1000 + 100),
-			title: title,
-			body: body,
-			user: user,
-		};
-		addPost(dataToPost);
-		navigate('/');
-	};
+	// const submitPostFormHandler = () => {
+	// 	if (title === '' || body === '') return;
+	// 	const dataToPost = {
+	// 		id: isEditing ? data.id : Math.ceil(Math.random() * 1000 + 100),
+	// 		title: title,
+	// 		body: body,
+	// 		user: user,
+	// 	};
+	// 	addPost(dataToPost);
+	// 	navigate('/');
+	// };
 
 	return (
 		<KeyboardAvoidingView
@@ -83,24 +81,20 @@ export default function Form() {
 			>
 				<TextInput
 					placeholder='Title'
-					onChangeText={titleInputHandler}
+					ref={titleInput}
 					defaultValue={title}
 					style={styles.formInput}
 					multiline={true}
 				/>
 				<TextInput
 					placeholder='Body'
-					onChangeText={bodyInputHandler}
+					ref={bodyInput}
 					defaultValue={body}
 					style={styles.formInput}
 					multiline={true}
 				/>
-				{isEditing && (
-					<Text style={styles.user}>
-						{`User: ${user.username} - ${user.name} | ${user.email}`}
-					</Text>
-				)}
-				{!isEditing && (
+
+				{/* {!isEditing && (
 					<View>
 						<TextInput
 							placeholder='Name'
@@ -121,13 +115,13 @@ export default function Form() {
 							style={styles.formInput}
 						/>
 					</View>
-				)}
-				<View style={styles.formBtn}>
+				)} */}
+				{/* <View style={styles.formBtn}>
 					<Button
 						title='submit post'
 						onPress={submitPostFormHandler}
 					/>
-				</View>
+				</View> */}
 			</ScrollView>
 			<View style={styles.homeBtn}>
 				<HomeBtn />

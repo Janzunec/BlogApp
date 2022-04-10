@@ -10,10 +10,10 @@ import { Icon } from 'react-native-elements';
 import { Link } from 'react-router-native';
 import AuthContext from '../../Context/auth-context';
 
-export default function Post(props) {
+const PostCard = (props) => {
 	const dimensions = useWindowDimensions();
 
-	const postImage = require('../../../assets/test.png');
+	// const postImage = require('../../../assets/test.png');
 
 	const deleteHandler = () => {
 		props.deleteHandler(props.id);
@@ -106,13 +106,13 @@ export default function Post(props) {
 			</View>
 		</Link>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	post: {
 		flex: 1,
 		flexDirection: 'column',
-		minHeight: 'auto',
+		height: 300,
 		width: '100%',
 		marginVertical: 10,
 		backgroundColor: '#ddd',
@@ -121,12 +121,12 @@ const styles = StyleSheet.create({
 	},
 	postImage: {
 		width: '100%',
-		height: 200,
+		minHeight: 'auto',
 		flex: 1,
 		resizeMode: 'contain',
 		borderTopLeftRadius: 5,
 		borderTopRightRadius: 5,
-		backgroundColor: '#000',
+		backgroundColor: '#111',
 	},
 	postData: {
 		width: '100%',
@@ -193,3 +193,5 @@ const styles = StyleSheet.create({
 	// 		justifyContent: 'center',
 	// 	},
 });
+
+export default React.memo(PostCard);

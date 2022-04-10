@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useMemo } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -12,19 +12,26 @@ import NavBar from '../NavBar/NavBar';
 import AddPostBtn from './Buttons/AddPostBtn';
 import PostCard from './Cards/PostCard';
 
-export default function Blog(props) {
+const Posts = () => {
 	const dimensions = useWindowDimensions();
-
-	const [postsData, setPostsData] = useState([...props.posts]);
-
 	const authCtx = useContext(AuthContext);
-
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		let isMounted = true;
-		if (isMounted) setPostsData(props.posts);
-	}, [props.posts]);
+	const [data, setData] = useState([]);
+
+	const fetchAllPosts = async () => {
+		try {
+			const resp = await fetch('http://192.168.1.230:3000/post/all', {
+				method: 'GET',
+			});
+			const fetchedData = await resp.json().then((res) => res);
+			setData([...fetchedData]);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(fetchAllPosts, []);
 
 	const addPostHandler = (data) => {
 		const checkPostId = (post) => {
@@ -42,23 +49,6 @@ export default function Blog(props) {
 		setPostsData(newPostsData);
 	};
 
-	const editPostHandler = (id) => {
-		const checkPostId = (post) => {
-			return post.id === id;
-		};
-
-		const postIndex = postsData.findIndex(checkPostId);
-		const clickedPostData = postsData[postIndex];
-
-		navigate('/posts/form', {
-			state: {
-				data: clickedPostData,
-				type: 'edit',
-				addPost: addPostHandler,
-			},
-		});
-	};
-
 	const deletePostHandler = (id) => {
 		const checkPostId = (post) => {
 			return post.id === id;
@@ -71,7 +61,7 @@ export default function Blog(props) {
 			newPostsData.splice(postIndex, 1);
 		}
 
-		setPostsData([...newPostsData]);
+		setData([...newPostsData]);
 	};
 
 	return (
@@ -94,7 +84,7 @@ export default function Blog(props) {
 						},
 					]}
 				>
-					{postsData.map((post) => (
+					{data.map((post) => (
 						<PostCard
 							key={post.post_ID}
 							id={post.post_ID}
@@ -102,7 +92,6 @@ export default function Blog(props) {
 							body={post.body}
 							image={post.image}
 							deleteHandler={deletePostHandler}
-							editHandler={editPostHandler}
 						/>
 					))}
 				</ScrollView>
@@ -117,7 +106,7 @@ export default function Blog(props) {
 						styles.computerPostContainer,
 					]}
 				>
-					{postsData.map((post) => (
+					{data.map((post) => (
 						<PostCard
 							key={post.post_ID}
 							id={post.post_ID}
@@ -125,7 +114,6 @@ export default function Blog(props) {
 							body={post.body}
 							image={post.image}
 							deleteHandler={deletePostHandler}
-							editHandler={editPostHandler}
 						/>
 					))}
 				</View>
@@ -137,7 +125,7 @@ export default function Blog(props) {
 						: styles.addPostBtn,
 				]}
 			>
-				<AddPostBtn addPostHandler={addPostHandler} />
+				<AddPostBtn />
 			</View>
 			<View
 				style={[
@@ -149,7 +137,7 @@ export default function Blog(props) {
 			</View>
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	postsContainer: {
@@ -207,3 +195,5 @@ const styles = StyleSheet.create({
 		marginHorizontal: 'auto',
 	},
 });
+
+export default React.memo(Posts);

@@ -13,7 +13,8 @@ import AuthContext from '../Context/auth-context';
 import HomeBtn from './Buttons/HomeBtn';
 import CommentCard from './Cards/CommentCard';
 
-export default function PostDetails() {
+const PostDetails = () => {
+	const [postDetails, setPostDetails] = useState();
 	const [postComments, setPostComments] = useState([]);
 	const dimensions = useWindowDimensions();
 	const navigate = useNavigate();
@@ -23,40 +24,18 @@ export default function PostDetails() {
 	let detailsHeight = dimensions.height - imageHeight;
 
 	const location = useLocation();
-	let { id, image, title, body, user, editPost, deletePost } = location.state;
-
-	title = title[0].toUpperCase() + title.substring(1);
-	body = body[0].toUpperCase() + body.substring(1);
+	let { id, editPost, deletePost } = location.state;
 
 	useEffect(async () => {
-		const resp = await fetch('https://graphqlzero.almansi.me/api', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({
-				query: `{comments{
-					data{
-					  id
-					  name
-					  body
-					  email
-					  post{
-						id
-					  }
-					}
-				  }
-				}`,
-			}),
-		});
-
-		const fetchedData = await resp
-			.json()
-			.then((res) => res.data.comments.data);
-
-		const filteredData = fetchedData.filter(
-			(comment) => comment.post.id === id
-		);
-
-		setPostComments([...filteredData]);
+		try {
+			const resp = await fetch(`http://192.168.1.230:3000/post/${id}`, {
+				method: 'GET',
+			});
+			const fetchedData = await resp.json().then((res) => res);
+			setPostDetails(fetchedData[0]);
+		} catch (err) {
+			console.log(err);
+		}
 	}, []);
 
 	const editHandler = () => {
@@ -78,86 +57,49 @@ export default function PostDetails() {
 				},
 			]}
 		>
-			<Image
-				source={image}
-				style={{
-					height: imageHeight,
-					width: 'auto',
-				}}
-			/>
-			<ScrollView
-				style={[
-					styles.postDeatailsText,
-					{
-						minHeight: detailsHeight,
-					},
-				]}
-				showsVerticalScrollIndicator={false}
-			>
-				<Text style={styles.postDetailsTitle}>{title}</Text>
+			{postDetails && (
+				<ScrollView
+					style={[
+						styles.postDeatailsText,
+						{
+							minHeight: detailsHeight,
+						},
+					]}
+					showsVerticalScrollIndicator={false}
+				>
+					<Image
+						source={{ uri: postDetails.image }}
+						style={{
+							height: dimensions.width > 1100 ? 400 : 250,
+							width: 'auto',
+							flex: 1,
+							resizeMode: 'contain',
+							// backgroundColor: '#555',
+						}}
+					/>
+					<Text style={styles.postDetailsTitle}>
+						{postDetails.title}
+					</Text>
 
-				<Text style={styles.postDeatailsBody}>{`${body}
+					<Text style={styles.postDeatailsBody}>
+						{postDetails.body}
+					</Text>
 
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.
-				
-Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamezne objave, ko ta preseže velikost elementa.`}</Text>
-
-				<Text style={styles.postDeatailsUser}>
-					{`${user.username} - ${user.name} | ${user.email}`}
-				</Text>
-				<View style={styles.actionBtns}>
-					{authCtx.isLoggedIn && (
-						<View style={styles.actionBtn}>
-							<Icon
-								// raised
-								name='edit'
-								type='font-awesome'
-								color='#aaa'
-								style={{
-									height: 25,
-									width: 25,
-								}}
-								onPress={editHandler}
-							/>
-							<Text
-								style={{
-									color: '#aaa',
-									fontSize: 20,
-									fontWeight: '700',
-									marginLeft: 3,
-								}}
-								onPress={editHandler}
-							>
-								EDIT POST
-							</Text>
-						</View>
-					)}
-					{!authCtx.isLoggedIn && (
-						<Link to='/login' style={styles.actionBtn}>
+					<Text style={styles.postDeatailsUser}>
+						{`${postDetails.username} - ${postDetails.firstName} ${postDetails.secondName} | ${postDetails.email}`}
+					</Text>
+					<View style={styles.actionBtns}>
+						<Link
+							to={authCtx.isLoggedIn ? '/posts/form' : '/login'}
+							state={{
+								formType: 'edit',
+								post_ID: postDetails.post_ID,
+								title: postDetails.title,
+								body: postDetails.body,
+								image: postDetails.image,
+							}}
+							style={styles.actionBtn}
+						>
 							<>
 								<Icon
 									// raised
@@ -181,39 +123,10 @@ Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamez
 								</Text>
 							</>
 						</Link>
-					)}
-					{authCtx.isLoggedIn && (
-						<View style={[styles.actionBtn, { marginLeft: 15 }]}>
-							<Icon
-								// raised
-								name='trash'
-								type='font-awesome'
-								color='#f00'
-								style={{
-									height: 25,
-									width: 25,
-								}}
-								onPress={deleteHandler}
-							/>
-							<Text
-								style={{
-									color: 'red',
-									fontSize: 20,
-									fontWeight: '700',
-									marginLeft: 3,
-								}}
-								onPress={deleteHandler}
+						{authCtx.isLoggedIn && (
+							<View
+								style={[styles.actionBtn, { marginLeft: 15 }]}
 							>
-								DELETE POST
-							</Text>
-						</View>
-					)}
-					{!authCtx.isLoggedIn && (
-						<Link
-							to='/login'
-							style={[styles.actionBtn, { marginLeft: 15 }]}
-						>
-							<>
 								<Icon
 									// raised
 									name='trash'
@@ -223,6 +136,7 @@ Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamez
 										height: 25,
 										width: 25,
 									}}
+									onPress={deleteHandler}
 								/>
 								<Text
 									style={{
@@ -231,27 +145,59 @@ Ta tekst je tukaj z namenom, da se vidi funkcionalnost premikanja teksta posamez
 										fontWeight: '700',
 										marginLeft: 3,
 									}}
+									onPress={deleteHandler}
 								>
 									DELETE POST
 								</Text>
-							</>
-						</Link>
-					)}
-				</View>
-				<View style={styles.commentSection}>
-					<Text style={styles.commentSectionTitile}>COMMENTS:</Text>
+							</View>
+						)}
+						{!authCtx.isLoggedIn && (
+							<Link
+								to='/login'
+								style={[styles.actionBtn, { marginLeft: 15 }]}
+							>
+								<>
+									<Icon
+										// raised
+										name='trash'
+										type='font-awesome'
+										color='#f00'
+										style={{
+											height: 25,
+											width: 25,
+										}}
+									/>
+									<Text
+										style={{
+											color: 'red',
+											fontSize: 20,
+											fontWeight: '700',
+											marginLeft: 3,
+										}}
+									>
+										DELETE POST
+									</Text>
+								</>
+							</Link>
+						)}
+					</View>
+					<View style={styles.commentSection}>
+						<Text style={styles.commentSectionTitile}>
+							COMMENTS:
+						</Text>
 
-					{postComments.map((comment) => (
+						{/* {postComments.map((comment) => (
 						<CommentCard key={comment.id} data={comment} />
-					))}
-				</View>
-			</ScrollView>
+					))} */}
+					</View>
+				</ScrollView>
+			)}
 			<View style={styles.homeBtn}>
 				<HomeBtn />
 			</View>
 		</View>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	postDeatails: {
@@ -261,7 +207,7 @@ const styles = StyleSheet.create({
 		position: 'relative',
 	},
 	postDeatailsComputer: {
-		width: '50%',
+		width: '60%',
 		marginHorizontal: 'auto',
 	},
 	postDeatailsText: {
@@ -324,3 +270,5 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 });
+
+export default React.memo(PostDetails);

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import {
+	Image,
+	StyleSheet,
+	View,
+	StatusBar,
+	useColorScheme,
+} from 'react-native';
 import { NativeRouter, Route, Routes } from 'react-router-native';
 import About from './components/About/About';
 import { AuthContextProvider } from './components/Context/auth-context';
@@ -8,28 +14,27 @@ import Form from './components/Posts/Form/Form';
 import PostDetails from './components/Posts/PostDetails';
 import Posts from './components/Posts/Posts';
 
-export default function App() {
-	const [data, setData] = useState([]);
-	useEffect(async () => {
-		const resp = await fetch('http://localhost:3000/post/all', {
-			method: 'GET',
-		});
-		const fetchedData = await resp
-			.json()
-			.then((res) => res)
-			.catch((err) => {
-				console.log(error);
-			});
+const STYLES = ['default', 'dark-content', 'light-content'];
+const TRANSITIONS = ['fade', 'slide', 'none'];
 
-		setData(await fetchedData);
-	}, []);
+export default function App() {
+	const colorScheme = useColorScheme();
+
+	StatusBar.setBarStyle(STYLES[0], true);
+	StatusBar.setBackgroundColor('#333');
+
+	if (colorScheme === 'light') StatusBar.setBackgroundColor('#000', true);
+	if (colorScheme === 'dark') StatusBar.setBackgroundColor('#fff', true);
+	if (colorScheme === 'dark') StatusBar.setBarStyle(STYLES[1], true);
+	if (colorScheme === 'light') StatusBar.setBarStyle(STYLES[2], true);
 
 	return (
 		<AuthContextProvider>
+			<StatusBar animated={true} showHideTransition={'fade'} />
 			<NativeRouter>
 				<View style={styles.container}>
 					<Routes>
-						<Route path='/' element={<Posts posts={data} />} />
+						<Route path='/' element={<Posts />} />
 						<Route path='/about' element={<About />} />
 						<Route
 							path='/posts/details'
@@ -37,7 +42,6 @@ export default function App() {
 						/>
 						<Route path='/login' element={<Login />} />
 						<Route path='/posts/form' element={<Form />} />
-						{/* <Image source={data[0].image} /> */}
 					</Routes>
 				</View>
 			</NativeRouter>
