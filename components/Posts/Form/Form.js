@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
 	Button,
 	StyleSheet,
@@ -8,6 +8,7 @@ import {
 	View,
 	ScrollView,
 	KeyboardAvoidingView,
+	Linking,
 } from 'react-native';
 import { useLocation, useNavigate } from 'react-router-native';
 import HomeBtn from '../Buttons/HomeBtn';
@@ -17,27 +18,96 @@ export default function Form() {
 	const navigate = useNavigate();
 	const dimensions = useWindowDimensions();
 
+	const [titleInput, setTitleInput] = useState('');
+	const [bodyInput, setBodyInput] = useState('');
+	const [imageInput, setImageInput] = useState('');
+
 	const { formType, post_ID, title, body, image } = location.state;
+	useEffect(() => {
+		setTitleInput(title);
+		setBodyInput(body);
+		setImageInput(image);
+	}, []);
 	const isEditing = formType === 'edit' ? true : false;
 
-	const titleInput = useRef(null);
-	const bodyInput = useRef(null);
-	const imageInput = useRef(null);
+	if (formType === 'add') {
+		title = body = image = '';
+	}
 
-	// const titleInputHandler = (input) => {
-	// 	setTitle(input);
-	// };
+	const [titleIsEmpty, setTitleIsEmpty] = useState(false);
+	const [bodyIsEmpty, setBodyIsEmpty] = useState(false);
 
-	// const bodyInputHandler = (input) => {
-	// 	setBody(input);
-	// };
+	const titleInputHandler = (input) => {
+		console.log(input);
+		setTitleInput(input);
+		if (input === '') {
+			setTitleIsEmpty(true);
+			return;
+		}
+		setTitleIsEmpty(false);
+	};
 
-	// const nameInputHandler = (input) => {
-	// 	setUser((prevState) => ({
-	// 		...prevState,
-	// 		name: input,
-	// 	}));
-	// };
+	const bodyInputHandler = (input) => {
+		setBodyInput(input);
+		if (input === '') {
+			setBodyIsEmpty(true);
+
+			return;
+		}
+		setBodyIsEmpty(false);
+	};
+
+	const imageInputHandler = (input) => {
+		setImageInput(input);
+	};
+
+	const updatePostFormHandler = async () => {
+		if (titleInput === '' || bodyInput === '') {
+			return;
+		}
+
+		let updatedImage = '';
+		if (imageInput === '') {
+			updatedImage = image;
+		} else {
+			updatedImage = '';
+			updatedImage = 'data:image/jpeg;base64,' + imageInput;
+		}
+
+		const body = {
+			title: titleInput,
+			body: bodyInput,
+			image: updatedImage,
+		};
+
+		const req = await fetch(
+			`http://192.168.1.230:3000/post/update/${post_ID}`,
+			{
+				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			}
+		);
+
+		navigate('/');
+	};
+
+	const addPostFormHandler = () => {
+		if (bodyEl.current.value === '' || titleEl.current.value === '') {
+			if (bodyEl === '') setBodyIsEmpty(true);
+			if (titleEl === '') setTitleIsEmpty(true);
+			return;
+		}
+
+		let updatedImage = imageEl.current;
+		if (imageEl.current === '') updatedImage = image;
+
+		const updatedTitle = titleEl.current.value;
+		const updatedBody = bodyEl.current.value;
+	};
 
 	// const usernameInputHandler = (input) => {
 	// 	setUser((prevState) => ({
@@ -65,6 +135,10 @@ export default function Form() {
 	// 	navigate('/');
 	// };
 
+	const openConverterLink = () => {
+		Linking.openURL('https://elmah.io/tools/base64-image-encoder/');
+	};
+
 	return (
 		<KeyboardAvoidingView
 			style={{
@@ -81,18 +155,67 @@ export default function Form() {
 			>
 				<TextInput
 					placeholder='Title'
-					ref={titleInput}
 					defaultValue={title}
-					style={styles.formInput}
+					style={[
+						styles.formInput,
+						titleIsEmpty
+							? {
+									borderWidth: 2,
+									borderColor: 'red',
+									backgroundColor: '#f99',
+							  }
+							: '',
+					]}
 					multiline={true}
+					onChangeText={titleInputHandler}
 				/>
 				<TextInput
 					placeholder='Body'
-					ref={bodyInput}
 					defaultValue={body}
+					style={[
+						styles.formInput,
+						bodyIsEmpty
+							? {
+									borderWidth: 2,
+									borderColor: 'red',
+									backgroundColor: '#f99',
+							  }
+							: '',
+					]}
+					multiline={true}
+					onChangeText={bodyInputHandler}
+				/>
+				<Text
+					style={{ textAlign: 'center', color: '#fff', fontSize: 15 }}
+				>
+					To insert a picture please convert your image to Base 64.{' '}
+					<Text
+						style={{ color: '#0ff', fontSize: 20 }}
+						onPress={openConverterLink}
+					>
+						Image to Base64 converter
+					</Text>
+				</Text>
+
+				<TextInput
+					placeholder='Base64 code of your image'
+					defaultValue={''}
 					style={styles.formInput}
 					multiline={true}
+					onChangeText={imageInputHandler}
 				/>
+				{isEditing && (
+					<Text
+						style={{
+							textAlign: 'center',
+							color: '#aaa',
+							fontSize: 15,
+						}}
+					>
+						If you don't insert a new image the current one will
+						stay applied.
+					</Text>
+				)}
 
 				{/* {!isEditing && (
 					<View>
@@ -116,12 +239,14 @@ export default function Form() {
 						/>
 					</View>
 				)} */}
-				{/* <View style={styles.formBtn}>
+				<View style={styles.formBtn}>
 					<Button
 						title='submit post'
-						onPress={submitPostFormHandler}
+						onPress={
+							isEditing ? updatePostFormHandler : addPostHandler
+						}
 					/>
-				</View> */}
+				</View>
 			</ScrollView>
 			<View style={styles.homeBtn}>
 				<HomeBtn />
